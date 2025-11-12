@@ -159,12 +159,14 @@ cron.schedule('0 8 * * *', async () => {
 
 app.get('/test-db', async (req, res) => {
   try {
-    await db.sequelize.authenticate(); // intenta conectarse a la DB
+    await db.sequelize.authenticate();
     res.json({ message: "Conexión a la base de datos exitosa ✅" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error DB:', err);   // esto lo verás en los logs de Render
+    res.status(500).json({ error: err.toString() });
   }
 });
+
 
 //Iniciar el servidor 
 app.listen(port, () => {
