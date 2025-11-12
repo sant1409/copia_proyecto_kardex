@@ -1,0 +1,191 @@
+/* Contenedor principal */
+.kardex-container {
+  max-width: 1300px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Título */
+.kardex-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Grid para el formulario */
+.kardex-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+/* Grupo de campo */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiquetas */
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #34495e;
+  text-transform: capitalize;
+}
+
+/* Inputs normales y con datalist */
+.form-group input {
+  padding: 10px 12px;
+  border: 2px solid #dcdde1;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto focus */
+.form-group input:focus {
+  border-color: #2980b9;
+  box-shadow: 0 0 6px rgba(41, 128, 185, 0.4);
+}
+
+/* Botón */
+.kardex-button {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kardex-button button {
+  background-color: #080808;
+  color: white;
+  font-size: 16px;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.kardex-button button:hover {
+    background-color: #0f72ce; 
+}
+
+
+/* Contenedor de todas las tirillas */
+.tirillas-container {
+  margin-top: 30px;
+}
+
+/* Lista vertical de tirillas */
+.tirilla-card {
+  background: #f7f9fc;
+  border: 1px solid #dcdde1;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px; /* espacio entre tirillas */
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tirilla-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-color: #2980b9;
+}
+
+
+/* Header dentro de la tarjeta */
+.tirilla-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tirilla-buttons button {
+background-color: #080808;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.tirilla-buttons button:hover {
+  background-color: #06A9E5;
+}
+
+
+/* Modal de tirilla */
+.tirilla-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.tirilla-modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tirilla-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+/* Contenedor para el botón cerrar */
+.btn-cerrar {
+  display: flex;
+  justify-content: flex-start; /* a la izquierda */
+  margin-bottom: 20px;
+}
+
+
+/* Estilo del botón cerrar */
+.btn-cerrar button {
+  background-color: #080808; 
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.08s ease;
+}
+
+/* Hover */
+.btn-cerrar button:hover {
+    background-color: #0f72ce; 
+  transform: translateY(-1px);
+}
+

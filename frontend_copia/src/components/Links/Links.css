@@ -1,0 +1,99 @@
+/* === Panel de Links (como el de notificaciones) === */
+.links-panel {
+  position: fixed;
+  top: 60px; /* mismo margen que las notificaciones */
+  right: 20px;
+  width: 1000px;
+  max-height: 500px;
+  background: #fff;
+  border: 1px solid #ccc;
+  overflow-y: auto;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  z-index: 1000;
+  scrollbar-width: thin;
+  scrollbar-color: #000000 #f1f1f1;
+}
+
+/* Botón de cerrar */
+.cerrar-panel {
+  background: none;
+  border: none;
+  float: right;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Contenedor interno (antes .links_casas-container) */
+.links_casas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Título */
+.links_casas-container h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Mensaje */
+.mensaje-links {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #444;
+  background: #f0f0f0;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+/* Formulario */
+.form-links-casas {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.form-links-casas input {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 40%;
+}
+
+.form-links-casas button {
+  background-color: #080808;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.form-links-casas button:hover {
+  background-color: #0f72ce;
+}
+
+/* Tabla */
+.tabla-links-casas {
+  overflow-x: auto;
+}
+
+/* Botones dentro de la tabla */
+td button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-right: 4px;
+  transition: transform 0.2s ease;
+}
+
+td button:hover {
+  transform: scale(1.2);
+}

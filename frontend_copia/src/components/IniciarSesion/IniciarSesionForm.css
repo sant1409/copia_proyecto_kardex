@@ -1,0 +1,89 @@
+/* IniciarSesionForm.css */
+
+.iniciarsesion-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+   gap: 60px;
+  padding: 20px;
+  margin-top: 210px;
+  padding-left: 80px;
+}
+
+.form-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 100%;
+}
+
+.iniciarsesion-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.iniciarsesion-form h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.iniciarsesion-form input {
+    width: 600px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.iniciarsesion-form button {
+    padding: 12px;
+    background-color: #080808; ;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.iniciarsesion-form button:hover {
+    background-color: #0f72ce;
+}
+
+.mensaje {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.iniciarsesion-form p {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.iniciarsesion-form p:hover {
+    text-decoration: underline;
+}
+
+.landing-container .iniciarsesion-container {
+  margin-top: 0;
+}
+
+.olvidaste {
+    color: black;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.olvidaste:hover{
+    color:#080808;
+    text-decoration:underline;
+
+}

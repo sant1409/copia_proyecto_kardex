@@ -1,0 +1,13 @@
+# Dependencias
+node_modules/
+
+# Build
+dist/
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Variables de entorno
+.env
+.env.local

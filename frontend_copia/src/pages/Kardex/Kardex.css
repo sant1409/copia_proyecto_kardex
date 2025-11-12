@@ -1,0 +1,136 @@
+/* Contenedor del buscador */
+.buscar-kardex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: flex-start; /* agrupa a la izquierda */
+  background: #f1f3f5;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Inputs de búsqueda */
+.buscar-kardex input,
+.buscar-kardex select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  flex: 1 1 150px;
+  font-size: 14px;
+}
+
+/* Botón de búsqueda */
+.buscar-kardex button {
+  background-color: #080808;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.buscar-kardex button:hover {
+    background-color: #0f72ce; 
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .buscar-kardex {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .buscar-kardex input,
+  .buscar-kardex select,
+  .buscar-kardex button {
+    flex: 1 1 100%;
+  }
+}
+
+
+.botones-top {
+  display: flex;
+  gap: 12px; /* espacio entre botones */
+  align-items: center;
+  justify-content: flex-start; /* juntos a la izquierda */
+  margin: 10px 0 15px 0;
+}
+
+/* 🔹 Botón registrar y confirmar */
+.btn-registrar,
+.btn-confirmar,
+.btn-exportar {
+ 
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+.btn-registrar:hover,
+.btn-confirmar:hover,
+.btn-exportar:hover{
+   background-color: #0f72ce; 
+}
+
+
+/* 🔹 Mini form */
+.form-mini
+.Exportar {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.form-mini label {
+  font-weight: bold;
+}
+
+.form-mini input,
+.form-mini select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 120px; /* evita inputs muy pequeños */
+}
+
+
+/* 🔹 Scroll para toda la vista del Kardex */
+.kardex-page {
+  height: 100vh;              /* ocupa toda la pantalla */
+  overflow-y: auto;           /* activa el scroll vertical */
+  overflow-x: hidden;         /* evita desplazamiento lateral */
+  padding: 20px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #000000 #f1f1f1;
+}
+
+/* Para Chrome, Edge, Opera */
+.kardex-page::-webkit-scrollbar {
+  width: 10px;
+}
+
+.kardex-page::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.kardex-page::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 10px;
+}
+
+.kardex-page::-webkit-scrollbar-thumb:hover {
+  background-color: #000000;
+}
+

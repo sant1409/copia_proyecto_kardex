@@ -1,0 +1,11 @@
+.perfil-container {
+  color: black; /* cambia el color de todo el texto dentro */
+}
+
+.perfil-container h2 {
+  color: black; /* opcional: cambiar el título también */
+}
+
+.perfil-container p {
+  color: black;
+}

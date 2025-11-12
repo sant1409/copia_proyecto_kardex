@@ -1,0 +1,123 @@
+/* Inventario.css */
+
+/* Contenedor general */
+.inventario-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  height: 80vh;              /* altura visible */
+  overflow-y: auto;          /* activa scroll vertical */
+  scrollbar-width: thin;     /* scroll fino (Firefox) */
+  scrollbar-color: #000000 #f1f1f1;
+}
+
+/* Estilo del scroll (para navegadores basados en WebKit) */
+.inventario-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+/* Título principal */
+.inventario-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #222;
+}
+
+/* Contenedor del botón y filtros */
+.botones-top {
+  display: flex;
+  gap: 12px; /* espacio entre botones */
+  align-items: center;
+  justify-content: flex-start; /* juntos a la izquierda */
+  margin: 10px 0 15px 0;
+}
+
+
+/* Estilo del botón volver */
+.btn-volver,
+.btn-stock {
+  background-color: #080808;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-volver:hover {
+   background-color: #0f72ce; 
+}
+
+/* Contenedor de filtros */
+.inventario-filtros {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inventario-filtros select,
+.inventario-filtros input,
+.inventario-filtros button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.inventario-filtros button {
+    background-color: #080808;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.inventario-filtros button:hover {
+  background-color: #0f72ce; 
+}
+
+/* Grid de inventario */
+.inventario-grid {
+  display: grid;
+  gap: 15px;
+}
+
+/* Encabezados de cada sección */
+.inventario-grid h3 {
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #020202;
+}
+
+/* Tarjetas de inventario */
+.inventario-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+
+  display: flex;            /* usar flexbox */
+  flex-direction: column;   /* para que el strong y el span queden uno debajo del otro */
+  align-items: center;      /* centrar horizontalmente */
+  justify-content: center;  /* centrar verticalmente si quieres */
+  padding: 10px;            /* espacio interno */
+}
+
+.inventario-card strong {
+  display: block;
+  margin-bottom: 5px;
+  text-align: center;       /* centrar texto, por si acaso */
+}
+
+.inventario-card span {
+  text-align: center;       /* centrar la fecha */
+  font-size: 13px;          /* opcional, más compacto */
+  color: #020202;           /* opcional, más suave */
+}

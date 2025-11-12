@@ -1,0 +1,273 @@
+/* === Fondo general === */
+.admin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
+  font-family: "Poppins", sans-serif;
+}
+
+/* === Formulario de acceso === */
+.admin-form {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 340px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.admin-form:hover {
+  transform: translateY(-4px);
+}
+
+.admin-form h2 {
+  color: #111827;
+  margin-bottom: 25px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.admin-form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: border 0.2s ease;
+}
+
+.admin-form input:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.admin-form button {
+  background: #080808;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.admin-form button:hover {
+  transform: translateY(-1px);
+  background: #0f72ce; 
+}
+
+.mensaje {
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+.mensaje.exito {
+  color: #16a34a;
+}
+
+.mensaje.error {
+  color: #dc2626;
+}
+
+/* === Panel administrador === */
+.panel-admin {
+  
+  padding: 35px 40px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #000000 #f1f1f1;
+  font-family: "Poppins", sans-serif;
+}
+
+.panel-admin h1 {
+  text-align: center;
+  color: #000000 ;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+/* === Formulario de categorías === */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+.formulario h3 {
+  text-align: center;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.formulario input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.formulario input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.formulario button {
+  background: #080808;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.formulario button:hover {
+  background: #0f72ce;
+  transform: translateY(-1px);
+}
+
+.formulario .cancelar {
+  background: #9ca3af;
+}
+
+.formulario .cancelar:hover {
+  background: #6b7280;
+}
+
+/* === Lista de categorías === */
+.lista {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.lista li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  margin-bottom: 12px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.25s ease;
+}
+
+.lista li:hover {
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+.lista li span {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* === Botones de acción === */
+.lista li div {
+  display: flex;
+  gap: 12px;
+}
+
+.lista li button {
+  background: #f3f4f6;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.lista li button:hover {
+  transform: scale(1.15);
+}
+
+.lista li button:first-child {
+  color: #2563eb;
+}
+
+.lista li button.eliminar {
+  color: #dc2626;
+}
+
+.lista li button:first-child:hover {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.lista li button.eliminar:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+/* === Scrollbar personalizada === */
+.panel-admin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-admin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.panel-admin::-webkit-scrollbar-thumb {
+  background: #2563eb;
+  border-radius: 10px;
+}
+
+
+.bloque-limpieza {
+  margin-top: 30px;
+  padding: 20px;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  background-color: #fafafa;
+}
+
+.bloque-limpieza h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.bloque-limpieza p {
+  font-size: 14px;
+  color: #555;
+}
+
+.bloque-limpieza select {
+  padding: 8px;
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-limpiar {
+  margin-top: 15px;
+  background-color: #080808;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-limpiar:hover {
+  background-color: #0f72ce;
+}
+

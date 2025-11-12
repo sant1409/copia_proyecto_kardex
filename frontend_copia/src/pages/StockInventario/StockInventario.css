@@ -1,0 +1,160 @@
+/* --- Contenedor principal --- */
+.stock-container {
+  max-width: 1500px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f9fafb; /* fondo clarito */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 80vh;              /* altura visible */
+  overflow-y: auto;          /* activa scroll vertical */
+  scrollbar-width: thin;     /* scroll fino (Firefox) */
+  scrollbar-color: #000000 #f1f1f1;
+}
+
+/* Scroll personalizado (navegadores WebKit) */
+.stock-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Títulos */
+.stock-container h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.stock-container h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #0f172a;
+  border-left: 4px solid #2563eb; 
+  padding-left: 8px;
+}
+
+/* --- Tablas --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 15px;
+  table-layout: fixed; /* 🔹 asegura alineación de columnas */
+}
+
+/* Encabezado */
+thead {
+  background-color: #080808;
+  color: white;
+}
+
+th {
+  padding: 12px 10px;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 3px solid #050606;
+}
+
+/* Ancho de columnas */
+th:nth-child(1), td:nth-child(1) { width: 30%; } /* Nombre */
+th:nth-child(2), td:nth-child(2) { width: 15%; } /* Cantidad */
+th:nth-child(3), td:nth-child(3) { width: 30%; } /* Laboratorio / Casa comercial */
+
+/* Celdas */
+td {
+  padding: 12px 10px;
+  vertical-align: middle;
+  color: #334155;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 2px solid #050606;
+}
+
+/* Permitir varias líneas solo en la primera columna */
+td:nth-child(1) {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Centrar cantidad */
+td:nth-child(2) {
+  text-align: center;
+}
+
+/* Hover */
+tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  th {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+  }
+
+  td::before {
+    font-weight: bold;
+    color: #0f172a;
+    content: attr(data-label);
+    width: 45%;
+    display: inline-block;
+  }
+}
+
+/* Ajustar alineación de las columnas de texto largo */
+td:nth-child(3) {
+  white-space: normal;
+  word-break: break-word;
+  text-align: center; /* opcional, para centrar el texto */
+}
+
+
+/* --- Filtros --- */
+.stock-filtros {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.stock-filtros select,
+.stock-filtros input,
+.stock-filtros button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.stock-filtros button {
+  background-color: #080808;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.stock-filtros button:hover {
+  background-color: #0f72ce;
+}

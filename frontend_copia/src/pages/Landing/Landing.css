@@ -1,0 +1,126 @@
+
+
+/* CONTENEDOR PRINCIPAL */
+.landing-container {
+  display: flex;
+  min-height: 100vh; 
+  overflow: hidden;
+  align-items: stretch;  /* que ambas columnas ocupen la altura completa */
+  padding: 0;
+  margin: 0;
+}
+
+/* COLUMNA IZQUIERDA (login / registro) */
+.left-column {
+  width: 40vw;           
+  min-width: 360px;      
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* contenido arriba, logo abajo */
+  align-items: center;    
+  padding: 40px;
+  background-color: #fff; 
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+}
+
+/* CONTENIDO SUPERIOR (botones + formularios) */
+.contenido-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* BOTONES LOGIN / REGISTRO */
+.botones-landing {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.botones-landing button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.botones-landing button:hover {
+  background-color: #ccc;
+}
+
+.botones-landing button.activo {
+  background-color: #080808;
+  color: white;
+}
+
+/* FORMULARIOS LOGIN / REGISTRO */
+.formularios-landing {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.formularios-landing > .iniciarsesion-container,
+.formularios-landing > .registrarse-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* LOGO ABAJO */
+.logo-bottom {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.logo-bottom img {
+  max-width: 500px;
+  height: auto;
+}
+
+/* Texto sobre la imagen */
+.right-column {
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+  position: relative; /* importante para el overlay */
+}
+
+.right-column img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay centrado */
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+.overlay-text h1 {
+  font-size: 60px;
+  margin: 0 0 10px;
+}
+
+.overlay-text p {
+  font-size: 30px;
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* ❌ Oculta la barra de scroll */
+  margin: 0;
+  padding: 0;
+}
+
