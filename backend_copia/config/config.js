@@ -1,23 +1,21 @@
-// backend_copia/config/config.js
 require('dotenv').config();
 
 module.exports = {
   development: {
-    username: process.env.MYSQLUSER || 'root',
-    password: process.env.MYSQLPASSWORD || null,
-    database: process.env.MYSQLDATABASE || 'prueba_kardex',
-    host: process.env.MYSQLHOST || '127.0.0.1',
-    port: process.env.MYSQLPORT ? Number(process.env.MYSQLPORT) : 3306,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
     dialect: 'mysql',
-    logging: false
+    port: process.env.DB_PORT
   },
   production: {
-    username: process.env.MYSQLUSER,
-    password: process.env.MYSQLPASSWORD,
-    database: process.env.MYSQLDATABASE,
-    host: process.env.MYSQLHOST,
-    port: Number(process.env.MYSQLPORT),
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
     dialect: 'mysql',
-    logging: false
+    port: process.env.DB_PORT
   }
 };
+
