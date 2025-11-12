@@ -1,15 +1,11 @@
 {
   "name": "backend_copia",
   "version": "1.0.0",
-  "description": "```\r backend_kardex  = JavaScript - express - node.js - sequelize\r frontend_kardex = React + vite + css\r ```\r ## Comandos del sistema - backend\r ```\r Abrir carpeta \r cd backend_kardex\r __________________\r Comando para empezar a desarrollar el backend\r npm init -y\r npm install\r npm install bcrypt = Sirve para encriptar contraseñas en la base de datos\r npm install cors = permite bloquear peticiones de otros dominios. ej: backend está en localhost:3000 y frontend en localhost:5173, con cors permites que se comuniquen.\r npm install dotenv = Permite guardas variables en el archivo .env, donde van los datos de la base de datos\r npm install express = framework mas utilizado para crear servidores en Node.js\r npm install mysql2 = Es el conector de Node.js para MYSQL, permitiendo hacer consultas mysql desde mi codigo\r npm install sequelize = Es una ORM , que permite interactuar con la base de datos. Ej: crear migraciones\r npm install --save-dev sequelize-cli = Es la herramienta de línea de comandos para trabajar con Sequelize.\r npm install nodemailer  permite enviar codigos de verificacion al registrarse\r npm install node-cron\r npm install jsonwebtoken - token\r ___________________\r Crear migraciones a la base de datos desde el backend\r npx sequelize-cli migration:generate --name create-nombre_entidad\r npx sequelize-cli db:migrate",
-  "main": "db.js",
+  "description": "Backend Kardex",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
