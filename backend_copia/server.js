@@ -5,6 +5,8 @@ const  cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const cron = require('node-cron');
+const db = require('./models'); // <- esto importa tu index.js de Sequelize
+
 
 
 app.use(cors({
@@ -155,16 +157,14 @@ cron.schedule('0 8 * * *', async () => {
     }
 });
 
-// Temporal para probar conexión a MySQL
 app.get('/test-db', async (req, res) => {
   try {
-    const [result] = await db.sequelize.query("SELECT 1+1 AS result");
-    res.json({ db: result });
+    await db.sequelize.authenticate(); // intenta conectarse a la DB
+    res.json({ message: "Conexión a la base de datos exitosa ✅" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 //Iniciar el servidor 
 app.listen(port, () => {
