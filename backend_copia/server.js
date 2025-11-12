@@ -155,6 +155,17 @@ cron.schedule('0 8 * * *', async () => {
     }
 });
 
+// Temporal para probar conexión a MySQL
+app.get('/test-db', async (req, res) => {
+  try {
+    const [result] = await db.sequelize.query("SELECT 1+1 AS result");
+    res.json({ db: result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 //Iniciar el servidor 
 app.listen(port, () => {
     console.log(`Servidor corriendo en  http://localhost:${port}`)
