@@ -16,9 +16,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Permitir solicitudes sin origen (como Postman)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -29,6 +27,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 
 app.use(bodyParser.json());
 
