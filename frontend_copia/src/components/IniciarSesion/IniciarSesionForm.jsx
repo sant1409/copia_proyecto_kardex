@@ -33,7 +33,7 @@ export default function IniciarSesionForm() {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar-sesion`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar_sesion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, contraseña })
