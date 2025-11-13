@@ -9,8 +9,15 @@ const db = require('./models'); // <- esto importa tu index.js de Sequelize
 
 
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://copia-proyecto-kardex-frontend.onrender.com'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 
 app.use(bodyParser.json());
