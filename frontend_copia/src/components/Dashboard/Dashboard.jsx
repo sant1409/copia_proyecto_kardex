@@ -33,7 +33,7 @@ export default function Dashboard() {
   useEffect(() => {
     const verificarSesion = async () => {
       try {
-        const res = await fetch("http://localhost:3000/usuarios/sesion", {
+        const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/sesion`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`

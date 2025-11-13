@@ -54,8 +54,8 @@ export default function InsumosPage() {
   useEffect(() => {
     const cargarCategorias = async () => {
       try {
-
-        const res = await fetch(`http://localhost:3000/categoria?id_sede=${idSede}`, {
+                            
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/categoria?id_sede=${idSede}`,{
           headers: { "Authorization": `Bearer ${token}` }
          });
         const data = await res.json();
@@ -74,7 +74,7 @@ export default function InsumosPage() {
     const cargarTirillas = async () => {
       try {
 
-        const res = await fetch(`http://localhost:3000/insumos?id_sede=${idSede}`,{
+        const res = await  fetch(`${import.meta.env.VITE_API_URL}/insumos?id_sede=${idSede}`,{
           headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -132,8 +132,8 @@ export default function InsumosPage() {
     if (desde) params.append("desde", desde);
     if (hasta) params.append("hasta", hasta);
 
-    try {
-      const res = await fetch(`http://localhost:3000/insumos/buscar_insumos?${params.toString()}`,{
+    try {               
+      const res = await  fetch(`${import.meta.env.VITE_API_URL}/insumos/buscar_insumos?${params.toString()}`,{
           headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -269,8 +269,8 @@ export default function InsumosPage() {
         onEliminarTirilla={async (tirilla) => {
           if (!window.confirm("¿Seguro que quieres eliminar este insumo?")) return;
 
-          try {
-            const res = await fetch(`http://localhost:3000/insumos/${tirilla.detalle.id_insumo}`, {
+          try {                
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/insumos/${tirilla.detalle.id_insumo}`,{
               method: "DELETE",
                headers: { 
                        "Content-Type": "application/json",

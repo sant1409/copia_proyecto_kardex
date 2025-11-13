@@ -31,7 +31,7 @@ export default function Perfil() {
     const fetchNombreSede = async () => {
       if (usuario.id_sede) {
         try {
-          const res = await fetch(`http://localhost:3000/sede/${usuario.id_sede}`);
+          const res = await   fetch(`${import.meta.env.VITE_API_URL}/sede/${usuario.id_sede}`);
           const data = await res.json();
           setNombreSede(data.nombre || 'Desconocida');
           

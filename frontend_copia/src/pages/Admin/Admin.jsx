@@ -95,8 +95,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
     setCargando(true);
     setMensaje("");
     try {
-      const res = await fetch("http://localhost:3000/admin/verificar-admin", {
-        method: "POST",
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/verificar-admin`,{ 
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -123,7 +122,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
   // === CRUD Categorías ===
   const obtenerCategorias = async () => {
     try {
-      const res = await fetch("http://localhost:3000/categoria", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/categoria`,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -139,8 +138,9 @@ const [proveedoresK, setProveedoresK] = useState([]);
     try {
       const metodo = editando ? "PUT" : "POST";
       const url = editando
-        ? `http://localhost:3000/categoria/${editando}`
-        : "http://localhost:3000/categoria";
+     ? `${import.meta.env.VITE_API_URL}/categoria/${editando}`
+     : `${import.meta.env.VITE_API_URL}/categoria`;
+
       const res = await fetch(url, {
         method: metodo,
         headers: {
@@ -161,7 +161,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
 
   const eliminarCategoria = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar esta categoría?")) return;
-    await fetch(`http://localhost:3000/categoria/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/categoria/${id}`,{ 
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -173,7 +173,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
   // === CRUD Suscripciones ===
   const obtenerSuscripciones = async () => {
     try {
-      const res = await fetch("http://localhost:3000/suscripcion_notificaciones", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/suscripcion_notificaciones`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -189,8 +189,9 @@ const [proveedoresK, setProveedoresK] = useState([]);
     try {
       const metodo = editandoSus ? "PUT" : "POST";
       const url = editandoSus
-        ? `http://localhost:3000/suscripcion_notificaciones/${editandoSus}`
-        : "http://localhost:3000/suscripcion_notificaciones";
+        ? `${import.meta.env.VITE_API_URL}/suscripcion_notificaciones/${editandoSus}`
+        : `${import.meta.env.VITE_API_URL}/suscripcion_notificaciones`;
+
       const res = await fetch(url, {
         method: metodo,
         headers: {
@@ -210,7 +211,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
 
   const eliminarSuscripcion = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar este correo?")) return;
-    await fetch(`http://localhost:3000/suscripcion_notificaciones/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/suscripcion_notificaciones/${id}`,{
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -221,7 +222,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
 
   //Obtener casa
 const obtenerCasaComercial = async () => {
-  try {const res = await fetch("http://localhost:3000/casa_comercial", {
+  try {const res = await  fetch(`${import.meta.env.VITE_API_URL}/casa_comercial`,{
        headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -234,7 +235,7 @@ const obtenerCasaComercial = async () => {
 //Eliminar casa
 const eliminarCasa = async (id) => {if (!window.confirm("¿Seguro que deseas eliminar esta casa comercial?"))
     return;
-  await fetch(`http://localhost:3000/casa_comercial/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/casa_comercial/${id}`,{
     method: "DELETE", headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -243,7 +244,7 @@ const eliminarCasa = async (id) => {if (!window.confirm("¿Seguro que deseas eli
 
   // clasificacion de reactivo
   const obtenerClasificacionR = async () => {
-    try {const res = await fetch("http://localhost:3000/clasificacion_riesgo", {
+    try {const res = await fetch(`${import.meta.env.VITE_API_URL}/clasificacion_riesgo`,{
         headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
@@ -257,7 +258,7 @@ const eliminarCasa = async (id) => {if (!window.confirm("¿Seguro que deseas eli
    //Eliminar clasificacion de reactivos
   const eliminarClasifir = async (id) => { if (!window.confirm("¿Seguro que deseas eliminar la clasificación?"))
      return;
-    await fetch(`http://localhost:3000/clasificacion_riesgo/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/clasificacion_riesgo/${id}`,{
      method: "DELETE", headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -267,7 +268,7 @@ const eliminarCasa = async (id) => {if (!window.confirm("¿Seguro que deseas eli
 
   //  Clasificación de insumos
 const obtenerClasificacionInsumo = async () => {
-  try { const res = await fetch("http://localhost:3000/clasificacion", {
+  try { const res = await fetch(`${import.meta.env.VITE_API_URL}/clasificacion`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -281,7 +282,7 @@ const obtenerClasificacionInsumo = async () => {
  //Clasificacion de insumos
 const eliminarClasifInsumo = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar la clasificación?")) return;
-  await fetch(`http://localhost:3000/clasificacion/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/clasificacion/${id}`,{
     method: "DELETE", headers: {  Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -291,7 +292,7 @@ const eliminarClasifInsumo = async (id) => {
 
  //Laboratorio es de insumos 
 const obtenerLaboratorios = async () => {
-  try {const res = await fetch("http://localhost:3000/laboratorio", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/laboratorio`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -305,7 +306,7 @@ const obtenerLaboratorios = async () => {
 // eliminar laboratorio
 const eliminarLaboratorio = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar este laboratorio?")) return;
-  await fetch(`http://localhost:3000/laboratorio/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/laboratorio/${id}`,{
     method: "DELETE",headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -314,7 +315,7 @@ const eliminarLaboratorio = async (id) => {
 
    //Nombre del Insumo 
 const obtenerNombreInsumos = async () => {
-  try {const res = await fetch("http://localhost:3000/nombre_del_insumo", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/nombre_del_insumo`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -327,7 +328,7 @@ const obtenerNombreInsumos = async () => {
    //Eliminar insumo
 const eliminarNombreInsumo = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar este nombre de insumo?")) return;
-  await fetch(`http://localhost:3000/nombre_del_insumo/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/nombre_del_insumo/${id}`,{
     method: "DELETE",headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -336,7 +337,7 @@ const eliminarNombreInsumo = async (id) => {
 
   // Nombre Insumo Reactivos
 const obtenerNombreReactivos = async () => {
-  try {const res = await fetch("http://localhost:3000/nombre_insumo", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/nombre_insumo`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -350,7 +351,7 @@ const obtenerNombreReactivos = async () => {
 const eliminarNombreReactivo = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar este nombre de reactivo?"))
     return;
-  await fetch(`http://localhost:3000/nombre_insumo/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/nombre_insumo/${id}`,{
     method: "DELETE", headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -359,7 +360,7 @@ const eliminarNombreReactivo = async (id) => {
 
 // === Presentación (Insumos) ===
 const obtenerPresentaciones = async () => {
-  try {const res = await fetch("http://localhost:3000/presentacion", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/presentacion`,{
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -372,7 +373,7 @@ const obtenerPresentaciones = async () => {
     //Eliminar presentacion insumos
 const eliminarPresentacion = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar la presentación?")) return;
-  await fetch(`http://localhost:3000/presentacion/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/presentacion/${id}`,{
     method: "DELETE",headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -381,7 +382,7 @@ const eliminarPresentacion = async (id) => {
 
   //Presentación de reactivos
 const obtenerPresentacionesK = async () => {
-  try {const res = await fetch("http://localhost:3000/presentacion_k", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/presentacion_k`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -395,7 +396,7 @@ const obtenerPresentacionesK = async () => {
 //Eliminar presentacion de reactivos
 const eliminarPresentacionK = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar la presentación de reactivos?")) return;
-  await fetch(`http://localhost:3000/presentacion_k/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/presentacion_k/${id}`,{
     method: "DELETE", headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
@@ -404,7 +405,7 @@ const eliminarPresentacionK = async (id) => {
    
    //Proveedor de insumos
 const obtenerProveedores = async () => {
-  try {const res = await fetch("http://localhost:3000/proveedor", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/proveedor`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -418,7 +419,7 @@ const obtenerProveedores = async () => {
 //Eliminar proveedor de insumos
 const eliminarProveedor = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar este proveedor?")) return;
-  try { await fetch(`http://localhost:3000/proveedor/${id}`, {
+  try { await fetch(`${import.meta.env.VITE_API_URL}/proveedor/${id}`,{
       method: "DELETE",headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -431,7 +432,7 @@ const eliminarProveedor = async (id) => {
 
    // === Proveedor de reactivos
 const obtenerProveedoresK = async () => {
-  try {const res = await fetch("http://localhost:3000/proveedor_k", {
+  try {const res = await fetch(`${import.meta.env.VITE_API_URL}/proveedor_k`,{
       headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -445,7 +446,7 @@ const obtenerProveedoresK = async () => {
 //Eliminar proveedor de reactivos 
 const eliminarProveedorK = async (id) => {
   if (!window.confirm("¿Seguro que deseas eliminar este proveedor?")) return;
-  try { await fetch(`http://localhost:3000/proveedor_k/${id}`, {
+  try { await fetch(`${import.meta.env.VITE_API_URL}/proveedor_k/${id}`,{
       method: "DELETE",headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -461,7 +462,7 @@ const eliminarProveedorK = async (id) => {
       return;
     setLimpiando(true);
     try {
-      const res = await fetch("http://localhost:3000/auditoria/limpiar", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auditoria/limpiar`,{
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -481,7 +482,7 @@ const eliminarProveedorK = async (id) => {
 
   const obtenerAuditorias = async () => {
     try {
-      const res = await fetch("http://localhost:3000/auditoria", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auditoria`,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

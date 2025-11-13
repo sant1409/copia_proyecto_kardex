@@ -97,7 +97,7 @@ useEffect(() => {
       const token = localStorage.getItem("token");
 
       // 🔹 Fetch de reactivos
-      const insumosRes = await fetch(`http://localhost:3000/nombre_insumo?id_sede=${idSede}`, {
+      const insumosRes = await  fetch(`${import.meta.env.VITE_API_URL}/nombre_insumo?id_sede=${idSede}`,{
         headers: {
          "Authorization": `Bearer ${token}`
           }
@@ -111,7 +111,7 @@ useEffect(() => {
   
 
       // 🔹 Fetch de presentaciones
-      const presentacionesRes = await fetch(`http://localhost:3000/presentacion_k?id_sede=${idSede}`,{
+      const presentacionesRes = await fetch(`${import.meta.env.VITE_API_URL}/presentacion_k?id_sede=${idSede}`,{
         headers: {
          "Authorization": `Bearer ${token}`
           }
@@ -125,7 +125,7 @@ useEffect(() => {
 
 
       // 🔹 Fetch de casas comerciales
-      const casasRes = await fetch(`http://localhost:3000/casa_comercial?id_sede=${idSede}`,{
+      const casasRes = await fetch(`${import.meta.env.VITE_API_URL}/casa_comercial?id_sede=${idSede}`,{
         headers: {
          "Authorization": `Bearer ${token}`
           }
@@ -139,7 +139,7 @@ useEffect(() => {
    
 
       // 🔹 Fetch de proveedores
-      const proveedoresRes = await fetch(`http://localhost:3000/proveedor_k?id_sede=${idSede}`,{
+      const proveedoresRes = await fetch(`${import.meta.env.VITE_API_URL}/proveedor_k?id_sede=${idSede}`,{
         headers: {
          "Authorization": `Bearer ${token}`
           }
@@ -153,7 +153,7 @@ useEffect(() => {
  
 
       // 🔹 Fetch de clasificaciones de riesgo
-      const clasificacionesRes = await fetch(`http://localhost:3000/clasificacion_riesgo?id_sede=${idSede}`,{
+      const clasificacionesRes = await fetch(`${import.meta.env.VITE_API_URL}/clasificacion_riesgo?id_sede=${idSede}`,{
         headers: {
          "Authorization": `Bearer ${token}`
           }
@@ -258,9 +258,9 @@ if (preData && preData.id_kardex) {
 
     try {
          // ✅ Si hay preData.id → actualizar, sino crear
-      const url = preData && preData.id_kardex
-        ? `http://localhost:3000/kardex/${preData.id_kardex}`
-        : "http://localhost:3000/kardex";
+        const url = preData && preData.id_kardex
+  ? `${import.meta.env.VITE_API_URL}/kardex/${preData.id_kardex}`
+  : `${import.meta.env.VITE_API_URL}/kardex`;
           
       const metodo = preData && preData.id_kardex ? "PUT" : "POST";
 

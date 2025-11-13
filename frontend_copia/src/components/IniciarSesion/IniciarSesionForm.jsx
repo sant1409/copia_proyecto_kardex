@@ -33,7 +33,7 @@ export default function IniciarSesionForm() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/usuarios/iniciar_sesion", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar-sesion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, contraseña })
@@ -47,7 +47,7 @@ export default function IniciarSesionForm() {
         setMensaje("Inicio de sesión exitoso ✅");
 
         // Llama a la ruta protegida para obtener los datos del usuario
-        const perfilRes = await fetch("http://localhost:3000/usuarios/sesion", {
+        const perfilRes = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/sesion`, {
           headers: {
             "Authorization": `Bearer ${data.token}`
           }
@@ -77,7 +77,7 @@ export default function IniciarSesionForm() {
   const handleSubmitRecuperarClave = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/usuarios/resetear_clave", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/resetear_clave`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ codigo, nuevaContraseña })
@@ -99,7 +99,7 @@ export default function IniciarSesionForm() {
   const handleSubmitCorreo = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/usuarios/recuperar_clave", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/recuperar_clave`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo })
@@ -121,7 +121,7 @@ export default function IniciarSesionForm() {
   const handleSubmitCodigo = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/usuarios/verificar_codigo", {
+      const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar_codigo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, codigo })

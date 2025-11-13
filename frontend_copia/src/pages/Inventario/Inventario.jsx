@@ -39,7 +39,7 @@ export default function Inventario() {
         id_sede: idSede,
       }).toString();
 
-      const res = await fetch(`http://localhost:3000/inventario?${params}`, {
+      const res = await   fetch(`${import.meta.env.VITE_API_URL}/inventario?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

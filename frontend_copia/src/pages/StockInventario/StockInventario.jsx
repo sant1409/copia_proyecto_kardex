@@ -50,7 +50,7 @@ export default function StockInventario() {
         console.error("Falta token o id_sede en localStorage");
         return;
       }
-      const res = await fetch("http://localhost:3000/stock_inventario", {
+      const res = await   fetch(`${import.meta.env.VITE_API_URL}/stock_inventario`, {
          headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"

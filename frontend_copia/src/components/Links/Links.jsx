@@ -15,7 +15,7 @@ export default function Links() {
 
   const obtenerLinks = async () => {
     try {
-      const res = await fetch("http://localhost:3000/links");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links`);
       if (!res.ok) throw new Error("Error al obtener los links");
       const data = await res.json();
       setLinks(data);
@@ -32,7 +32,7 @@ export default function Links() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/links", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevoLink),
@@ -53,7 +53,7 @@ export default function Links() {
   const eliminarLink = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar este link?")) return;
     try {
-      const res = await fetch(`http://localhost:3000/links/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
         method: "DELETE",
       });
 
@@ -69,7 +69,7 @@ export default function Links() {
   const guardarEdicion = async (id) => {
     const linkEditado = links.find((l) => l.id_link === id);
     try {
-      const res = await fetch(`http://localhost:3000/links/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

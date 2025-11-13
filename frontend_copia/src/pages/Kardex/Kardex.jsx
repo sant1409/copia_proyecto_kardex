@@ -52,8 +52,8 @@ export default function KardexPage() {
   // 🔹 Carga inicial de todas las tirillas
 useEffect(() => {
   const cargarTirillas = async () => {
-    try {
-      const res = await fetch(`http://localhost:3000/kardex?id_sede=${idSede}`, {
+    try {               
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/kardex?id_sede=${idSede}`,{
           headers: { "Authorization": `Bearer ${token}` }
          });
       const data = await res.json();
@@ -106,8 +106,8 @@ const buscarKardex = async () => {
   if (desde) params.append("desde", desde);
   if (hasta) params.append("hasta", hasta);
 
-  try {
-    const res = await fetch(`http://localhost:3000/kardex/buscar_kardex?${params.toString()}`, {
+  try {               
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/kardex/buscar_kardex?${params.toString()}`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
@@ -266,9 +266,8 @@ return (
       onEliminarTirilla={async tirilla => {
         if (!window.confirm("¿Seguro que quieres eliminar esta tirilla?")) return;
 
-        try {
-          const res = await fetch(`http://localhost:3000/kardex/${tirilla.detalle.id_kardex}`,
-            {
+        try {             
+          const res = await   fetch(`${import.meta.env.VITE_API_URL}/kardex/${tirilla.detalle.id_kardex}`, {
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json",

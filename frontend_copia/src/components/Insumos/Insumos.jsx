@@ -74,7 +74,7 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
       const idSede = localStorage.getItem("id_sede");
       const token = localStorage.getItem("token");
       // 🔹 Insumos
-      const insumosRes = await fetch(`http://localhost:3000/nombre_del_insumo?id_sede=${idSede}`, {
+      const insumosRes = await  fetch(`${import.meta.env.VITE_API_URL}/nombre_del_insumo?id_sede=${idSede}`,{
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -88,7 +88,7 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
       console.log("Insumos cargados:", insumosOpciones);
 
       // 🔹 Presentaciones
-       const presentacionesRes = await fetch(`http://localhost:3000/presentacion?id_sede=${idSede}`, {
+       const presentacionesRes = await fetch(`${import.meta.env.VITE_API_URL}/presentacion?id_sede=${idSede}`,{ 
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -100,8 +100,8 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
       }));
       setPresentaciones(presentacionesOpciones);
 
-      // 🔹 Laboratorios
-       const labsRes = await fetch(`http://localhost:3000/laboratorio?id_sede=${idSede}`, {
+      // 🔹 Laboratorios     
+       const labsRes = await fetch(`${import.meta.env.VITE_API_URL}/laboratorio?id_sede=${idSede}`,{
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -114,7 +114,7 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
       setLaboratorios(labsOpciones);
 
       // 🔹 Proveedores
-      const proveedoresRes = await fetch(`http://localhost:3000/proveedor?id_sede=${idSede}`, {
+      const proveedoresRes = await fetch(`${import.meta.env.VITE_API_URL}/proveedor?id_sede=${idSede}`,{
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -127,7 +127,7 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
       setProveedores(proveedoresOpciones);
 
       // 🔹 Clasificaciones
-        const clasificacionesRes = await fetch(`http://localhost:3000/clasificacion?id_sede=${idSede}`, {
+        const clasificacionesRes = await  fetch(`${import.meta.env.VITE_API_URL}/clasificacion?id_sede=${idSede}`,{ 
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -140,7 +140,7 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
       setClasificaciones(clasificacionesOpciones);
 
       // 🔹 Categorías
-      const categoriasRes = await fetch(`http://localhost:3000/categoria?id_sede=${idSede}`, {
+      const categoriasRes = await fetch(`${import.meta.env.VITE_API_URL}/categoria?id_sede=${idSede}`,{
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -254,9 +254,9 @@ export default function Insumos({ preData, onBack, onNuevoRegistro }) {
 
     try {
        // ✅ Si hay preData.id → actualizar, sino crear
-      const url = preData && preData.id_insumo
-        ? `http://localhost:3000/insumos/${preData.id_insumo}`
-        : "http://localhost:3000/insumos";
+        const url = preData && preData.id_insumo
+       ? `${import.meta.env.VITE_API_URL}/insumos/${preData.id_insumo}`
+        : `${import.meta.env.VITE_API_URL}/insumos`;
       const metodo = preData && preData.id_insumo ? "PUT" : "POST";
          
       const res = await fetch(url, {

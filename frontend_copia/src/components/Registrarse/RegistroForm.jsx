@@ -33,7 +33,7 @@ export default function Registro() {
   const token = localStorage.getItem("token");
 
     useEffect(() => {
-    fetch("http://localhost:3000/sede")
+     fetch(`${import.meta.env.VITE_API_URL}/sede`)
       .then(res => res.json())
       .then(data => setSedes(data))
       .catch(err => console.error(err));
@@ -54,7 +54,7 @@ export default function Registro() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/usuarios/registrarse", {
+      const res = await await fetch(`${import.meta.env.VITE_API_URL}/usuarios/registrarse`,{ 
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ correo, nombre, contraseña, id_sede }),
@@ -76,7 +76,7 @@ export default function Registro() {
   const handleSubmitVerificacion = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/usuarios/verificar", {
+      const res = await await fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar`,{ 
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ correo, codigo}),
@@ -136,11 +136,9 @@ export default function Registro() {
           <button type="submit">Registrarse</button>
         </form>
         </div>
-        
-        
+               
       )}
       
-
       {paso === "verificar" && (
          
             <div className="registrarse-container">
