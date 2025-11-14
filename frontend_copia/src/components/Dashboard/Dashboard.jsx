@@ -1,121 +1,145 @@
-// EN esta parte se puede observar los botones principales, kardex, insumos, inventario
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import "./Dashboard.css";
 
-export default function HomeDashboard() {
+/**
+ * 🧭 Dashboard.jsx
+ * 
+ * Componente principal del panel del sistema Kardex.
+ * Verifica la sesión del usuario, maneja la navegación interna
+ * y muestra el menú lateral con acceso a:
+ *  - Perfil del usuario
+ *  - Notificaciones
+ *  - Links de casas comerciales
+ *  - Panel de administración
+ * 
+ * Usa <Outlet /> para renderizar las rutas hijas (Kardex, Insumos, etc.)
+ * y permite cerrar sesión eliminando el token y redirigiendo al login.
+ */
+
+
+import { useNavigate, Outlet } from "react-router-dom";
+import './Dashboard.css';
+import { useState, useEffect } from 'react';
+import Perfil from "../../pages/Perfil/Perfil";
+import HomeDashboard from "../../components/Dashboard/HomeDashboard";
+import Notificaciones from "../Notificaciones/Notificaciones";
+ import Links from "../Links/Links";
+
+
+export default function Dashboard() {
   const navigate = useNavigate();
-  const [mostrarMedia, setMostrarMedia] = useState(false);
-  const [mostrarPDF, setMostrarPDF] = useState(false); // 👈 Nuevo estado para el modal PDF
+  const [usuario, setUsuario] = useState(null);
+  const [perfilAbierto, setPerfilAbierto] = useState(false);
+  const [notiAbierta, setNotiAbierta] = useState(false);
+  const [linkAbierto, setLinkAbierto] = useState(false);
+
+  useEffect(() => {
+    const verificarSesion = async () => {
+       try {
+        const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/sesion`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          console.log("✅ Sesión activa:", data.usuario);
+          setUsuario(data.usuario);
+        } else {
+          console.log("⚠️ No hay sesión activa");
+          navigate("/iniciar-sesion");
+        }
+      } catch (error) {
+        console.error("Error verificando sesión:", error);
+        navigate("/iniciar-sesion");
+      }
+    };
+
+    verificarSesion();
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("id_sede");
+    navigate("/iniciar-sesion");
+  };
 
   return (
-    <div className="home-dashboard">
-      <div className="home-content">
-        <div className="image-wrapper">
-          {/* Imagen del laboratorio */}
-          <img
-            src="/visual/panel principal.png"
-            alt="Laboratorio Clínico Silvio Alfonso Marín Uribe"
-            className="home-image"
-          />
-
-          {/* Botón para abrir/cerrar el panel */}
-          <button
-            className="toggle-overlay"
-            onClick={() => setMostrarMedia(!mostrarMedia)}
-          >
-            {mostrarMedia
-              ? "🔒 Ocultar funcionamiento del sistema"
-              : "👉 Mostrar funcionamiento del sistema"}
-          </button>
-
-          {/* Panel corredizo con video y botón del PDF */}
-          <div className={`media-overlay ${!mostrarMedia ? "hidden" : ""}`}>
-            <video
-              className="dashboard-video"
-              src="/visual/Sistema de kardex funcionamiento.mp4"
-              controls
-              width="300"
-              onError={(e) => {
-                e.target.style.display = "none"; // Oculta el video si no carga
-              }}
-            ></video>
-
-            <iframe
-              src="/visual/Como usar el sistema de kardex.pdf"
-              className="pdf-viewer"
-              title="Manual completo"
-              onError={(e) => {
-                e.target.style.display = "none"; // Oculta si no existe el PDF
-              }}
-            ></iframe>
-
-            {/* 🔳 Modal para mostrar el PDF grande */}
-            {mostrarPDF && (
-              <div className="pdf-modal">
-                <div className="pdf-modal-content">
-                  <button
-                    className="cerrar-pdf"
-                    onClick={() => setMostrarPDF(false)}
-                  >
-                    ✖
-                  </button>
-                  <iframe
-                    src="/visual/Como usar el sistema de kardex.pdf"
-                    className="pdf-viewer"
-                    title="Manual completo"
-                  ></iframe>
-                </div>
+    <div className="Dashboard-container"> 
+      <aside className="Dashboard">
+        <h2>Menú</h2>
+        <ul>
+          <li className="perfil-item">
+            <button
+              className="perfil-button"
+              onClick={() => setPerfilAbierto(!perfilAbierto)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="black" viewBox="0 0 24 24">
+                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+              </svg>
+              Perfil
+              <span className={`flecha ${perfilAbierto ? "abierto" : ""}`}>▼</span>
+            </button>
+            {perfilAbierto && (
+              <div className="perfil-info">
+                <Perfil />
               </div>
             )}
+          </li>
 
-            {/* Botones principales debajo del texto */}
-            <div className="home-actions-overlay">
-              <button
-                onClick={() => navigate("/dashboard/kardex")}
-                className="home-btn kardex-btn"
-              >
-                <img
-                  src="https://www.pngfind.com/pngs/m/69-697004_png-file-svg-icono-de-laboratorio-png-transparent.png"
-                  alt="Kardex Icon"
-                  width="24"
-                  height="24"
-                  style={{ marginRight: "8px" }}
-                />
-                Kardex
-              </button>
+          <button 
+            className="btn-notificaciones" 
+            onClick={() => {      
+              setNotiAbierta(prev => !prev);
+            }}
+          >
+            📩 Notificaciones
+          </button>
 
-              <button
-                onClick={() => navigate("/dashboard/insumos")}
-                className="home-btn insumos-btn"
-              >
-                <img
-                  src="https://static.vecteezy.com/system/resources/previews/032/041/947/non_2x/clinical-analysis-result-icon-lab-blood-test-medicine-report-medical-check-up-health-check-png.png"
-                  alt="Insumos Icon"
-                  width="24"
-                  height="24"
-                  style={{ marginRight: "8px" }}
-                />
-                Insumos
-              </button>
+         <button 
+             className="btn-links" 
+             onClick={() => {setLinkAbierto(prev => !prev);
+             }}
+          >
+             🌐 Links casas comerciales
+            </button>
 
-              <button
-                onClick={() => navigate("/dashboard/inventario")}
-                className="home-btn inventario-btn"
-              >
-                <img
-                  src="https://tse4.mm.bing.net/th/id/OIP.ngWVJN0P6rafIjyHts9xCAHaIn?pid=ImgDet&w=206&h=239&c=7&dpr=1,6&o=7&rm=3"
-                  alt="Inventario Icon"
-                  width="24"
-                  height="24"
-                  style={{ marginRight: "8px" }}
-                />
-                Inventario
-              </button>
-            </div>
-          </div>
+          <li>
+            <button 
+              className="admin-button"
+              onClick={() => navigate("/dashboard/admin")}
+            >
+              🛠️ Administrador
+            </button>
+          </li>
+          
+        </ul>
+
+        {/* 👇 Botón de logout FUERA del ul, así se puede anclar abajo */}
+        <button onClick={handleLogout} className="logout-button">
+          Cerrar sesión
+        </button>
+      </aside>
+
+      <main className="main-content">
+        <Outlet />
+      </main>
+
+      {notiAbierta && (
+        <div className="notificaciones-panel">
+          <button className="cerrar-panel" onClick={() => setNotiAbierta(false)}>✖</button>
+          <Notificaciones />
         </div>
+      )}
+      
+      {linkAbierto && (
+         <div className="links-panel">
+          <button className="cerrar-panel" onClick={() => setLinkAbierto(false)}>✖</button>
+           <Links />
       </div>
+      )}
+
     </div>
   );
 }
