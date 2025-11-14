@@ -160,13 +160,7 @@ router.post('/', verificarToken, async (req, res) => {
     const idProveedor = await obtenerOcrearFK(pool, 'proveedor_k', 'proveedor_k', id_proveedor_k, id_sede);
     const idClasificacionRiesgo = await obtenerOcrearFK(pool, 'clasificacion_riesgo', 'clasificacion_riesgo', id_clasificacion_riesgo, id_sede);
 
-    // ❌ Restricción: no permitir 'salida' en la creación
-    if (salida !== undefined && salida !== null && Number(salida) > 0) {
-      return res.status(400).json({
-        error: "No se puede asignar una salida al crear un reactivo. La salida solo puede registrarse al actualizar un reactivo."
-      });
-    }
-
+   
     //  Insertar kardex
     const [result] = await pool.query(
 
