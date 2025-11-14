@@ -1,271 +1,359 @@
-:root {
-  /* Colores globales */
-  --color-primary-bg: white;
-  --color-text-dark: #333;
-  --border-radius: 12px;
-  --shadow-light: rgba(0, 0, 0, 0.35);
-  --shadow-dark: rgba(255, 255, 255, 0.05);
-  --sidebar-min-width: 60px;
-  --transition-speed: 0.3s ease;
-  --transition-fast: 0.15s ease;
+
+
+
+.Dashboard-container {
+    display: flex;
+    min-height: 100vh;
 }
-
-/* ===========================
-   VARIABLES SOLO DEL DASHBOARD
-   =========================== */
-.dashboard-scope {
-  --color-secondary-bg: #1e1e1e;
-  --color-accent: #00bcd4;
-  --color-text-light: #e0e0e0;
-  --color-danger: #d32f2f;
-  --sidebar-width: 280px;
-  --sidebar-width-collapsed: 85px;
-  --transition-speed: 0.3s;
-}
-
-/* ---------------------------
-| BASE GLOBAL
-----------------------------*/
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--color-primary-bg);
-  color: var(--color-text-light);
-  line-height: 1.5;
-  transition: background-color var(--transition-speed);
-}
-
-/* ---------------------------
-| DASHBOARD LAYOUT
-----------------------------*/
-.Dashboard-container { display: flex; min-height: 100vh; overflow-x: hidden; }
 
 .Dashboard {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: var(--sidebar-width);
-  max-width: 100%;
-  background: var(--color-secondary-bg);
-  padding: 24px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 4px 0 12px var(--shadow-dark);
-  transition: width var(--transition-speed), padding var(--transition-speed);
-  overflow: hidden;
+    flex: 0 0 250px; /* ancho fijo, no crecer ni encoger */
+    width: 250px;
+    background: #68d2ff;
+    color: white;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
-.Dashboard.collapsed {
-  width: var(--sidebar-width-collapsed);
-  padding: 16px 8px;
-}
+
+/* Título */
 .Dashboard h2 {
-  font-size: 1.5rem;
-  color: var(--color-accent);
-  margin-bottom: 24px;
-  border-bottom: 2px solid var(--color-accent);
-  padding-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: opacity var(--transition-speed), font-size var(--transition-speed);
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: black;
 }
-.Dashboard.collapsed h2 { opacity: 0; font-size: 0; }
 
-.Dashboard ul { list-style: none; padding: 0; margin: 0 0 auto 0; }
+/* Lista del sidebar sin puntos y alineada */
+.Dashboard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.logout-button {
+  margin-top: auto; 
+}
 
-.Dashboard button {
+.Dashboard ul li {
+    margin-bottom: 8px;
+}
+
+/* Botones del sidebar (perfil ahora es button) */
+.perfil-button {
+    display: flex;
+    justify-content: space-between; /* icono a la izquierda, flecha a la derecha */
+    align-items: center;
+    width: 100%;
+    background: none;
+    border: 2px solid black;
+    color: rgb(8, 8, 8);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.perfil-button:hover {
+    background-color: #0f72ce;
+}
+
+/* Flecha que rota */
+.flecha {
+    transition: transform 0.3s;
+}
+
+.flecha.abierto {
+    transform: rotate(180deg);
+}
+
+/* Contenedor desplegable del perfil */
+.perfil-info {
+    margin-top: 0px;
+    margin-left: 0px; /* espacio para que no quede pegado al icono */
+    background: rgba(255,255,255,0.1);
+    padding: 8px;
+    border-radius: 5px;
+    max-height: 300px; /* evitar que se "mochen" los datos */
+    overflow-y: auto;   /* scroll si hay mucho contenido */
+}
+
+/* Personalizar scrollbar (Chrome, Edge, Safari) */
+.perfil-info::-webkit-scrollbar {
+  width: 8px;           /* ancho de la barra */
+}
+
+
+.perfil-info::-webkit-scrollbar-track {
+  background: #000;      /* fondo de la barra */
+}
+
+.perfil-info::-webkit-scrollbar-thumb {
+  background-color: #0f72ce; /* parte que se mueve */
+  border-radius: 4px;
+  border: 2px solid #000; /* opcional: margen */
+}
+
+/* Contenido principal */
+.main-content {
+    flex: 1;
+    padding: 24px;
+    background-color: #fdfbfb;
+}
+
+.logout-button {
+  background-color: #080808;
+  border-radius: 5px;
+  text-align: left;
+  color: rgb(248, 243, 243);
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 14px;
+  margin-top: auto; /* lo empuja hacia el fondo */
+  margin-bottom: 30px;
+}
+
+.logout-button:hover {
+  background-color: #0f72ce;
+}
+
+.home-dashboard {
+  flex: 1;
+  height: 100vh;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  background: none; /* quitamos color base */
+
+}
+
+/* Contenedor de toda la parte central */
+.home-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--color-text-light);
-  background: var(--color-secondary-bg);
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
-  transition: all var(--transition-speed);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-.Dashboard button:hover {
-  transform: translateY(-2px);
-  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
-  color: var(--color-accent);
-}
-.Dashboard button svg { fill: currentColor; min-width: 24px; }
 
-/* ---------------------------
-| MAIN CONTENT
-----------------------------*/
-.main-content {
-  flex-grow: 1;
-  margin-left: var(--sidebar-width);
-  padding: 30px;
-  transition: margin-left var(--transition-speed), padding var(--transition-speed);
-}
-.Dashboard.collapsed ~ .main-content { margin-left: var(--sidebar-width-collapsed); }
-
-/* ---------------------------
-| HOME DASHBOARD
-----------------------------*/
-.home-dashboard { padding: 0; }
-.home-content { position: relative; }
+/* Contenedor de la imagen (para poder posicionar cosas encima) */
 .image-wrapper {
   position: relative;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  box-shadow: 0 8px 20px var(--shadow-dark);
+  max-width: 1300px;
 }
-.home-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: brightness(0.7);
-  transition: filter 0.3s;
-}
-.image-wrapper:hover .home-image { filter: brightness(0.85); }
 
+/* Imagen principal */
+.home-image {
+  height: 100vh;
+}
+
+/* Botones superpuestos y centrados debajo del texto */
 .home-actions-overlay {
   position: absolute;
-  top: 65%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 15%; /* Ajusta esto para colocarlos justo debajo de las letras */
+  left: 17%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
+  gap: 15px;
 }
+
+/* Estilos de los botones */
 .home-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 400px;
   padding: 30px;
-  border-radius: var(--border-radius);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--color-text-light);
-  border: none;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  box-shadow: 4px 4px 15px var(--shadow-light), -4px -4px 15px var(--shadow-dark);
-}
-.home-btn:hover {
-  transform: translateY(-5px);
-  box-shadow: 6px 6px 20px rgba(0,188,212,0.4), -6px -6px 20px var(--shadow-dark);
-}
-.kardex-btn { background: linear-gradient(135deg, #00bcd4, #0097a7); }
-.insumos-btn { background: linear-gradient(135deg, #00bcd4, #0097a7); }
-.inventario-btn { background: linear-gradient(135deg, #00bcd4, #0097a7); }
-
-/* ---------------------------
-| VIDEO Y PDF (PANEL DESLIZANTE)
-----------------------------*/
-.toggle-overlay {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(0, 188, 212, 0.8);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 15px;
+  border: 30%;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 0.9rem;
-  z-index: 11;
+  color: black;
+  background: white;
+  transition: all 0.3s ease;
+  
 }
-.toggle-overlay:hover { background: rgba(0, 188, 212, 1); }
 
+.home-btn:hover {
+  background: #0f72ce;
+  transform: translateY(-3px);
+  opacity: 1;
+}
+
+/* Responsive: apilar imagen y botones si se reduce mucho */
+@media (max-width: 1024px) {
+  .image-wrapper {
+    max-width: 100%;
+  }
+
+  .home-actions-overlay {
+    bottom: 5%;
+    gap: 10px;
+  }
+
+  .home-btn {
+    width: 140px;
+    font-size: 1rem;
+  }
+}
+
+.btn-notificaciones,
+.btn-links,
+.admin-button {
+    background-color: #080808;
+    border-radius: 5px;
+    text-align: left;
+    color: rgb(248, 243, 243);
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 12px;
+     margin-bottom: 10px;
+}
+
+.btn-notificaciones:hover,
+.btn-links:hover,
+.admin-button:hover {
+     background-color: #0f72ce; 
+}
+
+.notificaciones-panel,
+.notificaciones-panel {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 500px;
+  max-height: 500px;
+  background: #fff;
+  border: 1px solid #ccc;
+  overflow-y: auto;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  z-index: 1000;
+  scrollbar-width: thin;
+  scrollbar-color: #000000 #f1f1f1;
+
+}
+
+.cerrar-panel {
+  background: none;
+  border: none;
+  float: right;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.notificacion-item {
+  margin-bottom: 10px;
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.notificacion-item p {
+  margin: 5px 0;
+}
+
+.marcar-leida {
+    background-color: #080808;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.marcar-leida:hover {
+  background-color: #0f72ce; 
+}
+
+/* Botón que abre o cierra el panel */
+.toggle-overlay {
+  position: absolute;
+  top: 10px;
+  right: -150px;
+  z-index: 11;
+  background: #080808;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.toggle-overlay:hover {
+  background: #0f72ce;
+}
+
+/* Contenedor de video y PDF */
 .media-overlay {
   position: absolute;
-  top: 70px;
-  right: 10px;
+  top: 60px;
+  right: -150px;
   display: flex;
   flex-direction: column;
   gap: 15px;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.4s ease, opacity 0.4s ease;
-  max-width: 90%;
-  max-height: 80vh;
-  overflow: hidden;
 }
+
+/* Estado oculto (desliza hacia la derecha) */
 .media-overlay.hidden {
   transform: translateX(120%);
   opacity: 0;
   pointer-events: none;
 }
 
-.dashboard-video,
-.dashboard-pdf {
+/* Video y PDF */
+.dashboard-video {
   border-radius: 8px;
   width: 300px;
   height: 170px;
   object-fit: cover;
 }
-.dashboard-pdf { height: 200px; border: none; }
 
-.video-placeholder {
-  width: 300px;
-  height: 170px;
-  background: #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  color: #555;
-  font-weight: bold;
-}
-
-.pdf-button,
-.pdf-download {
-  margin-top: 4px;
-  display: block;
-  padding: 12px 16px;
+.dashboard-pdf {
   border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 1rem;
-  color: var(--color-text-light);
-  background: var(--color-secondary-bg);
-  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
-  text-align: center;
-  transition: all var(--transition-speed);
+  border-radius: 8px;
+  width: 300px;
+  height: 200px;
 }
-.pdf-button:hover,
-.pdf-download:hover {
-  transform: translateY(-2px);
-  color: var(--color-accent);
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .media-overlay {
+    top: 10px;
+    right: 10px;
+    width: 90%;
+  }
+
+  .dashboard-video,
+  .dashboard-pdf {
+    width: 100%;
+  }
 }
 
 /* === PDF MODAL === */
 .pdf-modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(10,10,10,0.85);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
+
 .pdf-modal-content {
   position: relative;
   width: 90%;
@@ -273,41 +361,41 @@ body {
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
 }
-.pdf-viewer { width: 100%; height: 100%; border: none; }
+
+.pdf-viewer {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 .cerrar-pdf {
-  position: absolute; top: 10px; right: 15px;
-  background: crimson; color: white;
-  border: none; border-radius: 6px;
-  padding: 6px 10px; cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: crimson;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
   font-weight: bold;
 }
 
-/* ---------------------------
-| RESPONSIVE
-----------------------------*/
-@media (max-width: 1024px) {
-  :root { --sidebar-width: 220px; }
-  .Dashboard { width: var(--sidebar-width); padding: 16px 12px; }
-  .Dashboard button { font-size: 0.95rem; gap: 10px; padding: 10px 12px; }
-  .main-content { margin-left: var(--sidebar-width); padding: 20px; }
-  .home-actions-overlay { gap: 15px; }
-  .home-btn { width: 150px; height: 150px; font-size: 1rem; }
+.pdf-button,
+.pdf-download {
+  margin-top: 4px;
+  display: block;
+  padding: 3px 10px;
+  border: 12%;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
 }
 
-@media (max-width: 768px) {
-  :root { --sidebar-width: var(--sidebar-width-collapsed); }
-  .Dashboard { width: var(--sidebar-width); padding: 10px 6px; }
-  .Dashboard button { width: 50px; height: 50px; border-radius: 50%; padding: 0; justify-content: center; }
-  .Dashboard h2 { display: none; }
-  .main-content { margin-left: var(--sidebar-width); padding: 15px; }
-  .home-actions-overlay { bottom: 5%; top: auto; transform: translateX(-50%); flex-direction: row; gap: 12px; }
-  .home-btn { width: 100px; height: 100px; font-size: 0.8rem; padding: 10px; }
-}
-
-@media (max-width: 480px) {
-  .home-btn { width: 90px; height: 90px; font-size: 0.75rem; }
-  .home-actions-overlay { gap: 10px; }
-  .main-content { padding: 10px; }
+.pdf-button:hover,
+.pdf-download:hover {
+  background: #0f72ce;
 }
