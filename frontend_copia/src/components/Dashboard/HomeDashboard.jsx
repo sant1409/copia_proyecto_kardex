@@ -6,7 +6,7 @@ import "./Dashboard.css";
 export default function HomeDashboard() {
   const navigate = useNavigate();
   const [mostrarMedia, setMostrarMedia] = useState(false);
-  const [mostrarPDF, setMostrarPDF] = useState(false);
+  const [mostrarPDF, setMostrarPDF] = useState(false); // 👈 Nuevo estado para el modal PDF
 
   return (
     <div className="home-dashboard">
@@ -25,56 +25,35 @@ export default function HomeDashboard() {
             onClick={() => setMostrarMedia(!mostrarMedia)}
           >
             {mostrarMedia
-              ? "🔒 Ocultar funcionamiento del sistema"
+              ? "🔒  Ocultar funcionamiento del sistema"
               : "👉 Mostrar funcionamiento del sistema"}
           </button>
 
-          {/* Panel corredizo con video y PDF */}
+          {/* Panel corredizo con video y botón del PDF */}
           <div className={`media-overlay ${!mostrarMedia ? "hidden" : ""}`}>
-            {/* Video */}
             <video
               className="dashboard-video"
-              src="/visual/Sistema de kardex funcionamiento.mp4"
+              src="/visual/Sistema de kardex.mp4"
               controls
               width="300"
-              onError={(e) => {
-                e.target.style.display = "none"; // Oculta el video si no carga
-              }}
-            >
-              Tu navegador no soporta video.
-            </video>
-
-            {/* Placeholder si el video no existe */}
-            <div className="video-placeholder">
-              🎬 Video no disponible
-            </div>
-
-            {/* PDF pequeño */}
-            <iframe
-              src="/visual/Como usar el sistema de kardex.pdf"
-              className="dashboard-pdf"
-              title="Manual completo"
-              onError={(e) => {
-                e.target.style.display = "none"; // Oculta si no existe
-              }}
-            ></iframe>
+            ></video>
 
             {/* Botón para abrir el PDF grande */}
             <button className="pdf-button" onClick={() => setMostrarPDF(true)}>
               📄 Ver manual en pantalla completa
             </button>
 
-            {/* Botón para descargar PDF */}
+            {/* Botón adicional para descargar el PDF */}
             <a
               href="/visual/Como usar el sistema de kardex.pdf"
               download="Manual del Sistema de Kardex.pdf"
               className="pdf-download"
             >
-              ⬇️ Descargar manual
+             ⬇️ Descargar manual
             </a>
           </div>
 
-          {/* Modal PDF */}
+          {/* 🔳 Modal para mostrar el PDF grande */}
           {mostrarPDF && (
             <div className="pdf-modal">
               <div className="pdf-modal-content">
@@ -88,15 +67,12 @@ export default function HomeDashboard() {
                   src="/visual/Como usar el sistema de kardex.pdf"
                   className="pdf-viewer"
                   title="Manual completo"
-                  onError={(e) => {
-                    e.target.style.display = "none";
-                  }}
                 ></iframe>
               </div>
             </div>
           )}
 
-          {/* Botones principales */}
+          {/* Botones principales debajo del texto */}
           <div className="home-actions-overlay">
             <button
               onClick={() => navigate("/dashboard/kardex")}
@@ -107,7 +83,7 @@ export default function HomeDashboard() {
                 alt="Kardex Icon"
                 width="24"
                 height="24"
-                style={{ marginRight: "8px" }}
+                style={{ marginRight: '8px' }}
               />
               Kardex
             </button>
@@ -121,7 +97,7 @@ export default function HomeDashboard() {
                 alt="Insumos Icon"
                 width="24"
                 height="24"
-                style={{ marginRight: "8px" }}
+                style={{ marginRight: '8px' }}
               />
               Insumos
             </button>
@@ -135,7 +111,7 @@ export default function HomeDashboard() {
                 alt="Inventario Icon"
                 width="24"
                 height="24"
-                style={{ marginRight: "8px" }}
+                style={{ marginRight: '8px' }}
               />
               Inventario
             </button>
