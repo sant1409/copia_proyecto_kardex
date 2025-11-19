@@ -1,4 +1,3 @@
-
 /**
  * 🧭 Dashboard.jsx
  * 
@@ -33,8 +32,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     const verificarSesion = async () => {
-       try {
-        const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/sesion`, {
+      try {
+         const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/sesion`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -66,7 +65,10 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="Dashboard-container"> 
+   <div className="dashboard-scope Dashboard-container">
+
+    
+
       <aside className="Dashboard">
         <h2>Menú</h2>
         <ul>
