@@ -12,7 +12,7 @@
 
 
 import { useState, useEffect } from "react";
-import "../Kardex/kardex.css";
+import "../Kardex/Kardex.css";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReporteInsumo from "../../exportar/ReporteInsumo";
 
@@ -90,8 +90,6 @@ export default function InsumosListaTirillas({
     "categoria"
   ];
 
-
-
   function obtenerColorVencimiento(fecha_vencimiento) {
     if (!fecha_vencimiento) {
       return "white";
@@ -122,8 +120,6 @@ export default function InsumosListaTirillas({
       return "rgba(0, 128, 0, 0.4)";
     }
   }
-
-
 
   // Función para mostrar la fecha en formato 'YYYY-MM-DD'
   const formatearFecha = (fechaISO) => {
