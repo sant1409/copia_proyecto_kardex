@@ -144,11 +144,16 @@ router.post('/', verificarToken, async (req, res) => {
       return res.status(400).json({ error: "El nombre del laboratorio es obligatorio, para que el stock funcione correctamente" });
     }
 
-
     // Validar cantidad
     if (cantidad === undefined || cantidad === null || (typeof cantidad === 'string' && cantidad.trim() === '') || isNaN(Number(cantidad))) {
       return res.status(400).json({ error: "La cantidad es obligatoria para que el stock pueda funcionar correctamente" });
     }
+
+    // Validar factura obligatoria
+    if (factura === undefined || factura === null || (typeof factura === "string" && factura.trim() === "")) {
+      return res.status(400).json({ error: "El número de la factura es obligatorio para registrar el kardex" });
+    }
+
     console.log('id_sede:', id_sede)
     // Validar o crear FK
     const idNombreDelInsumo = await obtenerOcrearFK(pool, 'nombre_del_insumo', 'nombre_del_insumo', id_nombre_del_insumo, id_sede);
@@ -215,11 +220,10 @@ router.post('/', verificarToken, async (req, res) => {
 });
 
 
-
 // Buscar insumos (con joins completos y filtros)
-// Buscar insumos (con joins completos y filtros por sede)
+
 router.get('/buscar_insumos', verificarToken, async (req, res) => {
-  const { q, nombre, laboratorio, lote, desde, hasta } = req.query;
+  const { q, nombre, laboratorio, factura, lote, desde, hasta } = req.query;
   const id_sede = req.usuario.id_sede; // ✅ Sede del usuario logueado
 
   let condiciones = [];
@@ -228,8 +232,8 @@ router.get('/buscar_insumos', verificarToken, async (req, res) => {
   // Buscador general (campo q)
   if (q && q.trim() !== '') {
     const like = `%${q.trim()}%`;
-    condiciones.push("(ni.nombre LIKE ? OR l.nombre LIKE ? OR i.lote LIKE ?)");
-    valores.push(like, like, like);
+    condiciones.push("(ni.nombre LIKE ? OR l.nombre LIKE ? OR i.factura LIKE ? OR i.lote LIKE ?)");
+    valores.push(like, like, like, like);
   }
 
   // Filtros opcionales
@@ -241,6 +245,11 @@ router.get('/buscar_insumos', verificarToken, async (req, res) => {
   if (laboratorio) {
     condiciones.push("l.nombre LIKE ?");
     valores.push(`%${laboratorio}%`);
+  }
+
+   if (factura) {
+    condiciones.push("i.factura LIKE ?");
+    valores.push(`%${factura}%`);
   }
 
   if (lote) {
@@ -289,6 +298,7 @@ router.get('/buscar_insumos', verificarToken, async (req, res) => {
       i.termino,
       i.lab_sas,
       i.factura,
+      i.pagado,
       i.costo_global,
       i.costo,
       i.costo_prueba,
@@ -551,6 +561,39 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+ 
+
+// ✅ Actualizar estado de pago por factura (por sede)
+router.put('/pagado/:factura', verificarToken, async (req, res) => {
+  try {
+    const { factura } = req.params;
+    const { pagado } = req.body;
+    const id_sede = req.usuario.id_sede;
+
+    // Validar que pagado sea 0 o 1
+    if (pagado !== 0 && pagado !== 1 && pagado !== true && pagado !== false) {
+      return res.status(400).json({ error: 'El campo pagado debe ser 0 o 1.' });
+    }
+    // Convertir true/false a 1/0 por si te llega booleano
+    const pagadoValue = pagado ? 1 : 0;
+
+    // UPDATE por factura y sede
+    const [result] = await pool.query(
+      `UPDATE insumos SET pagado = ? WHERE factura = ? AND id_sede = ?`,
+
+      [pagadoValue, factura, id_sede]
+    );
+
+    res.json({
+      message: 'Estado de pago actualizado correctamente.',
+      registrosAfectados: result.affectedRows
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Buscar un insumo por ID (con joins y nombres descriptivos)
 
@@ -571,7 +614,6 @@ router.get('/:id_insumo', verificarToken, async (req, res) => {
         i.cantidad,
         i.salida,
         i.saldo,
-
         -- Nombres en lugar de IDs
         ni.nombre  AS nombre_del_insumo,
         p.nombre   AS presentacion,
@@ -579,7 +621,6 @@ router.get('/:id_insumo', verificarToken, async (req, res) => {
         pr.nombre  AS proveedor,
         c.nombre   AS clasificacion,
         cat.nombre AS categoria,
-
         i.lote,
         i.fecha_de_vto,
         i.registro_invima,
@@ -590,6 +631,7 @@ router.get('/:id_insumo', verificarToken, async (req, res) => {
         i.termino,
         i.lab_sas,
         i.factura,
+        i.pagado,
         i.costo_global,
         i.costo,
         i.costo_prueba,
@@ -673,6 +715,7 @@ router.get('/', verificarToken, async (req, res) => {
         i.termino,
         i.lab_sas,
         i.factura,
+        i.pagado,
         i.costo_global,
         i.costo,
         i.costo_prueba,

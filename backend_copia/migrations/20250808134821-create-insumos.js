@@ -87,6 +87,7 @@ module.exports = {
       termino: { type: Sequelize.DATE, allowNull: true },
       lab_sas: { type: Sequelize.STRING, allowNull: true },
       factura: { type: Sequelize.STRING, allowNull: true },
+      pagado: {type: Sequelize.BOOLEAN, allowNull: false,defaultValue: false},
       costo_global: { type: Sequelize.DECIMAL, allowNull: true },
       costo: { type: Sequelize.DECIMAL, allowNull: true },
       costo_prueba: { type: Sequelize.DECIMAL, allowNull: true },

@@ -93,6 +93,7 @@ module.exports = {
       fecha_terminacion: { type: Sequelize.STRING, allowNull: true },
       area: { type: Sequelize.STRING, allowNull: true },
       factura: { type: Sequelize.STRING, allowNull: true },
+      pagado: {type: Sequelize.BOOLEAN, allowNull: false,defaultValue: false},
       costo_general: { type: Sequelize.DECIMAL, allowNull: true },
       costo_caja: { type: Sequelize.DECIMAL, allowNull: true },
       costo_prueba: { type: Sequelize.DECIMAL, allowNull: true },
