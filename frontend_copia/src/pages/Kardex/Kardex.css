@@ -1,106 +1,155 @@
-/* Contenedor del buscador */
+/* ---------------------------
+| CONTENEDOR PRINCIPAL KARDEX
+----------------------------*/
+.kardex-container {
+  max-width: 1700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+}
+
+/* Título */
+.kardex-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #000;
+  text-align: center;
+}
+
+/* ---------------------------
+| BUSCADOR
+----------------------------*/
 .buscar-kardex {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  margin-bottom: 20px;
-  margin-top: 15px;
   align-items: center;
-  justify-content: flex-start; /* agrupa a la izquierda */
-  background: #f1f3f5;
+  justify-content: flex-start;
+  background: var(--color-primary-bg);
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   border: 1px solid #ccc;
+  transition: all var(--transition-speed)
 }
 
-/* Inputs de búsqueda */
 .buscar-kardex input,
 .buscar-kardex select {
-  padding: 8px 10px;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border-radius: var(--border-radius);
   border: 1px solid #ccc;
   flex: 1 1 150px;
   font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-/* Botón de búsqueda */
+.buscar-kardex input:focus,
+.buscar-kardex select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 6px rgba(0, 188, 212, 0.4);
+}
+
 .buscar-kardex button {
-  background-color: #080808;
-  color: white;
+  background: var(--color-secondary-bg);
+  color: var(--color-text-light);
   border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
+  border-radius: var(--border-radius);
+  padding: 11px 16px;
+  font-weight: 500;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s ease;
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
+  transition: all var(--transition-speed);
 }
 
 .buscar-kardex button:hover {
-    background-color: #0f72ce; 
+  transform: translateY(-2px);
+  color: var(--color-accent);
+  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-  .buscar-kardex {
-    flex-direction: column;
-    gap: 8px;
-  }
+/* ---------------------------
+| MINI FORM Y EXPORTAR
+----------------------------*/
+.form-mini,
+.Exportar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 
-  .buscar-kardex input,
-  .buscar-kardex select,
-  .buscar-kardex button {
-    flex: 1 1 100%;
-  }
+}
+
+.form-mini label,
+.Exportar label {
+  font-weight: 600;
+}
+
+.form-mini input,
+.form-mini select,
+.Exportar input,
+.Exportar select {
+  padding: 10px;
+  border-radius: var(--border-radius);
+  border: 1px solid #ccc;
+  min-width: 120px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.form-mini input:focus,
+.form-mini select:focus,
+.Exportar input:focus,
+.Exportar select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 6px rgba(0,188,212,0.4);
+}
+.form-mini {
+  margin-bottom: 15px !important;
+}
+
+.Exportar {
+  margin-top: 15px !important;
 }
 
 
+/* ---------------------------
+| BOTONES TOP
+----------------------------*/
 .botones-top {
   display: flex;
-  gap: 12px; /* espacio entre botones */
+  gap: 12px;
   align-items: center;
-  justify-content: flex-start; /* juntos a la izquierda */
-  margin: 10px 0 15px 0;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
-/* 🔹 Botón registrar y confirmar */
 .btn-registrar,
 .btn-confirmar,
 .btn-exportar {
- 
-  color: white;
+  background: var(--color-secondary-bg);
+  color: var(--color-text-light);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1rem;
   padding: 8px 12px;
+  font-weight: 500;
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
+  transition: all var(--transition-speed);
 }
 
 .btn-registrar:hover,
 .btn-confirmar:hover,
-.btn-exportar:hover{
-   background-color: #0f72ce; 
-}
-
-
-/* 🔹 Mini form */
-.form-mini
-.Exportar {
-  margin-top: 15px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.form-mini label {
-  font-weight: bold;
-}
-
-.form-mini input,
-.form-mini select {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  min-width: 120px; /* evita inputs muy pequeños */
+.btn-exportar:hover,
+.btn-volver:hover {
+  transform: translateY(-2px);
+  color: var(--color-accent);
+  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
 }
 
 
@@ -132,5 +181,22 @@
 
 .kardex-page::-webkit-scrollbar-thumb:hover {
   background-color: #000000;
+}
+
+
+/* ---------------------------
+| RESPONSIVE
+----------------------------*/
+@media (max-width: 768px) {
+  .buscar-kardex input,
+  .buscar-kardex select,
+  .buscar-kardex button,
+  .form-mini input,
+  .form-mini select,
+  .Exportar input,
+  .Exportar select,
+  .botones-top button {
+    flex: 1 1 100%;
+  }
 }
 

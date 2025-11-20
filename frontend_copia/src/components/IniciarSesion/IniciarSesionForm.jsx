@@ -33,7 +33,7 @@ export default function IniciarSesionForm() {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar_sesion`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar_sesion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, contraseña })
@@ -57,7 +57,7 @@ export default function IniciarSesionForm() {
         if (perfilRes.ok) {
           localStorage.setItem("usuario", JSON.stringify(perfil.usuario));
           localStorage.setItem("id_sede", perfil.usuario.id_sede);
-       
+
         }
 
         // Redirigir al dashboard
@@ -77,7 +77,7 @@ export default function IniciarSesionForm() {
   const handleSubmitRecuperarClave = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/resetear_clave`,{
+       const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/resetear_clave`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ codigo, nuevaContraseña })
@@ -121,7 +121,7 @@ export default function IniciarSesionForm() {
   const handleSubmitCodigo = async (e) => {
     e.preventDefault();
     try {
-      const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar_codigo`, {
+        const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar_codigo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, codigo })

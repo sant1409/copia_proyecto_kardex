@@ -1,19 +1,19 @@
 /* IniciarSesionForm.css */
 
 .iniciarsesion-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-   gap: 60px;
-  padding: 20px;
-  margin-top: 210px;
-  padding-left: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 60px;
+    padding: 20px;
+    margin-top: 210px;
+    padding-left: 80px;
 }
 
 .form-card {
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     padding: 30px;
     width: 100%;
 }
@@ -40,7 +40,8 @@
 
 .iniciarsesion-form button {
     padding: 12px;
-    background-color: #080808; ;
+    background-color: #080808;
+    ;
     color: white;
     border: none;
     border-radius: 8px;
@@ -50,8 +51,9 @@
 }
 
 .iniciarsesion-form button:hover {
-    background-color: #0f72ce;
+    color: #00bcd4;
 }
+
 
 .mensaje {
     color: red;
@@ -71,7 +73,7 @@
 }
 
 .landing-container .iniciarsesion-container {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .olvidaste {
@@ -82,8 +84,8 @@
     transition: color 0.3s ease;
 }
 
-.olvidaste:hover{
-    color:#080808;
-    text-decoration:underline;
+.olvidaste:hover {
+    color: #080808;
+    text-decoration: underline;
 
 }

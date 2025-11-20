@@ -53,7 +53,8 @@ export default function Links() {
   const eliminarLink = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar este link?")) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
+           const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
+          
         method: "DELETE",
       });
 
@@ -177,7 +178,7 @@ export default function Links() {
                       </>
                     ) : (
                       <>
-                        <button onClick={() => setEditando(l.id_link)}>
+                        <button  onClick={() => setEditando(l.id_link)}>
                           ✏️
                         </button>
                         <button onClick={() => eliminarLink(l.id_link)}>

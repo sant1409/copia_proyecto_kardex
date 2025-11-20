@@ -1,123 +1,198 @@
-/* Inventario.css */
-
-/* Contenedor general */
+/* ---------------------------
+| CONTENEDOR PRINCIPAL INVENTARIO
+----------------------------*/
 .inventario-container {
   max-width: 1500px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  height: 80vh;              /* altura visible */
-  overflow-y: auto;          /* activa scroll vertical */
-  scrollbar-width: thin;     /* scroll fino (Firefox) */
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+  height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
   scrollbar-color: #000000 #f1f1f1;
 }
 
-/* Estilo del scroll (para navegadores basados en WebKit) */
+/* Scroll WebKit */
 .inventario-container::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
+.inventario-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.inventario-container::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 10px;
+}
+
+.inventario-container::-webkit-scrollbar-thumb:hover {
+  background-color: #000000;
+}
 
 /* Título principal */
 .inventario-container h2 {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-size: 28px;
-  color: #222;
+  font-weight: 600;
+  color: #000;
 }
 
-/* Contenedor del botón y filtros */
+/* ---------------------------
+| BOTONES ARRIBA (VOLVER + STOCK)
+----------------------------*/
 .botones-top {
   display: flex;
-  gap: 12px; /* espacio entre botones */
+  gap: 12px;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start; /* juntos a la izquierda */
-  margin: 10px 0 15px 0;
+  justify-content: flex-start;
+  /* izquierda */
+  margin-bottom: 15px;
 }
 
-
-/* Estilo del botón volver */
 .btn-volver,
 .btn-stock {
-  background-color: #080808;
-  color: white;
+  background: var(--color-secondary-bg);
+  color: var(--color-text-light);
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
+  transition: all var(--transition-speed);
 }
 
-.btn-volver:hover {
-   background-color: #0f72ce; 
+.btn-volver:hover,
+.btn-stock:hover {
+  transform: translateY(-2px);
+  color: var(--color-accent);
+  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
 }
 
-/* Contenedor de filtros */
+/* ---------------------------
+| FILTROS CENTRADOS
+----------------------------*/
 .inventario-filtros {
   display: flex;
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.inventario-filtros select,
 .inventario-filtros input,
-.inventario-filtros button {
-  padding: 8px 12px;
+.inventario-filtros select {
+  padding: 10px 12px;
   font-size: 14px;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   border: 1px solid #ccc;
+  font-family: 'Inter', sans-serif;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.inventario-filtros input:focus,
+.inventario-filtros select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
 }
 
 .inventario-filtros button {
-    background-color: #080808;
-  color: #fff;
+  background: var(--color-secondary-bg);
+  color: var(--color-text-light);
   border: none;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: 0.3s;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px 14px;
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
+  transition: all var(--transition-speed);
 }
 
 .inventario-filtros button:hover {
-  background-color: #0f72ce; 
+  transform: translateY(-2px);
+  color: var(--color-accent);
+  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
 }
 
-/* Grid de inventario */
+/* ---------------------------
+| GRID DE INVENTARIO
+----------------------------*/
 .inventario-grid {
   display: grid;
   gap: 15px;
 }
 
-/* Encabezados de cada sección */
 .inventario-grid h3 {
   grid-column: 1 / -1;
   margin-bottom: 10px;
   font-size: 20px;
-  color: #020202;
+  font-weight: 600;
+  color: #000;
 }
 
-/* Tarjetas de inventario */
+/* ---------------------------
+| TARJETAS DE INVENTARIO
+----------------------------*/
 .inventario-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: var(--border-radius);
+  background: #ffffff;
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
   cursor: pointer;
-
-  display: flex;            /* usar flexbox */
-  flex-direction: column;   /* para que el strong y el span queden uno debajo del otro */
-  align-items: center;      /* centrar horizontalmente */
-  justify-content: center;  /* centrar verticalmente si quieres */
-  padding: 10px;            /* espacio interno */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
+.inventario-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
+}
+
+/* Nombre del insumo/reactivo: negrita normal */
 .inventario-card strong {
   display: block;
   margin-bottom: 5px;
-  text-align: center;       /* centrar texto, por si acaso */
+  text-align: center;
+  font-weight: bold;
+  text-transform: none;
 }
 
+/* Resto de la información de la tirilla: mayúsculas sostenidas */
 .inventario-card span {
-  text-align: center;       /* centrar la fecha */
-  font-size: 13px;          /* opcional, más compacto */
-  color: #020202;           /* opcional, más suave */
+  text-align: center;
+  font-size: 13px;
+  color: #020202;
+  text-transform: uppercase;
+}
+
+
+/* ---------------------------
+| RESPONSIVE
+----------------------------*/
+@media (max-width: 768px) {
+  .botones-top {
+    flex-direction: column;
+    align-items: flex-start;
+    /* botones apilados a la izquierda */
+  }
+
+  .inventario-filtros input,
+  .inventario-filtros select,
+  .inventario-filtros button,
+  .botones-top button {
+    flex: 1 1 100%;
+  }
 }

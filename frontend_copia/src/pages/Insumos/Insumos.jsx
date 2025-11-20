@@ -12,20 +12,21 @@
 import { useState, useEffect } from "react";
 import Insumos from "../../components/Insumos/Insumos";
 import InsumosListaTirillas from "../../components/Insumos/InsumosListaTirillas";
-import './Insumos.css';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { exportarInsumos } from "../../exportar/ExportarInsumos";
+import "../Kardex/Kardex.css";
 
 export default function InsumosPage() {
   // 🔹 Estados principales
   const [showMiniForm, setShowMiniForm] = useState(false);
   const [preData, setPreData] = useState({ mes_registro: "", categoria: "" });
   const [tirillas, setTirillas] = useState([]);
-   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
-   const [mes, setMes] = useState("");
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+  const [mes, setMes] = useState("");
   const [showInsumosForm, setShowInsumosForm] = useState(false);
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtroLaboratorio, setFiltroLaboratorio] = useState("");
+  const [filtroFactura, setFiltroFactura] = useState("");
   const [filtroLote, setFiltroLote] = useState("");
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
@@ -36,32 +37,42 @@ export default function InsumosPage() {
   const openId = searchParams.get("open"); // puede ser null
 
   //  Año actual y lista de años dinámicos (desde año actual hasta 3000)
-  const anioActual = new Date().getFullYear(); 
-  const años = Array.from({ length: 3000 - anioActual + 1 }, (_, i) => anioActual + i); 
-  
-  //Estado para el año seleccionado (inicial = año actual)
-  const [anioSeleccionado, setAnioSeleccionado] = useState(String(anioActual)); 
+  const anioActual = new Date().getFullYear();
+  const años = Array.from({ length: 3000 - anioActual + 1 }, (_, i) => anioActual + i);
 
-  
+  //Estado para el año seleccionado (inicial = año actual)
+  const [anioSeleccionado, setAnioSeleccionado] = useState(String(anioActual));
+
+
 
   const handleVolver = () => {
-  navigate(-1); // esto hace que vaya a la página anterior en la historia
-};
-   const idSede = localStorage.getItem("id_sede");
-   const token = localStorage.getItem("token"); 
+    navigate(-1); // esto hace que vaya a la página anterior en la historia
+  };
+  const idSede = localStorage.getItem("id_sede");
+  const token = localStorage.getItem("token");
+
+  const handleActualizarPagoFactura = ({ factura, pagado }) => {
+    setTirillas(prev =>
+      prev.map(t =>
+        t.detalle.factura === factura
+          ? { ...t, detalle: { ...t.detalle, pagado } }
+          : t
+      )
+    );
+  };
 
   // 🔹 Carga inicial de categorías
   useEffect(() => {
     const cargarCategorias = async () => {
       try {
-                            
+
         const res = await fetch(`${import.meta.env.VITE_API_URL}/categoria?id_sede=${idSede}`,{
           headers: { "Authorization": `Bearer ${token}` }
-         });
+        });
         const data = await res.json();
         const opciones = data.map(cat => ({ id_categoria: cat.id_categoria, nombre: cat.categoria }));
         setCategorias(opciones);
-        
+
       } catch (error) {
         console.error("Error cargando categorías:", error);
       }
@@ -73,17 +84,16 @@ export default function InsumosPage() {
   useEffect(() => {
     const cargarTirillas = async () => {
       try {
-
-        const res = await  fetch(`${import.meta.env.VITE_API_URL}/insumos?id_sede=${idSede}`,{
+         const res = await  fetch(`${import.meta.env.VITE_API_URL}/insumos?id_sede=${idSede}`,{
           headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const data = await res.json();
         const tirillasCargadas = data.map(r => ({
           fecha: r.fecha,
           descripcion: r.id_nombre_del_insumo || r.lote || "Registro insumo",
-          
+
           detalle: {
             ...r,
             categoria: categorias.find(c => c.id_categoria === r.id_categoria)?.nombre || r.categoria || ""
@@ -127,21 +137,22 @@ export default function InsumosPage() {
     const params = new URLSearchParams();
     if (filtroNombre) params.append("nombre", filtroNombre);
     if (filtroLaboratorio) params.append("laboratorio", filtroLaboratorio);
+    if (filtroFactura) params.append("factura", filtroFactura);
     if (filtroLote) params.append("lote", filtroLote);
     if (busqueda) params.append("q", busqueda);
     if (desde) params.append("desde", desde);
     if (hasta) params.append("hasta", hasta);
 
-    try {               
+    try {
       const res = await  fetch(`${import.meta.env.VITE_API_URL}/insumos/buscar_insumos?${params.toString()}`,{
-          headers: {
+        headers: {
           "Authorization": `Bearer ${token}`
         }
       });
       const data = await res.json();
       const tirillasCargadas = data.map(r => ({
         fecha: r.fecha,
-        descripcion: r.nombre_del_insumo || r.lote || r.laboratorio || "Registro insumo",
+        descripcion: r.nombre_del_insumo || r.factura || r.lote || r.laboratorio || "Registro insumo",
         detalle: {
           ...r,
           categoria: categorias.find(c => c.id_categoria === r.id_categoria)?.nombre || r.categoria || ""
@@ -153,77 +164,71 @@ export default function InsumosPage() {
     }
   };
 
-  return (   
-    
-    <div className="insumos-page">
-      {/* 🔹 Botón de volver */}
-       <div className="botones-top">
-    <button className="btn-volver" onClick={handleVolver}>
-      ← Volver
-    </button>
-    
-      <button className="btn-registrar" onClick={() => setShowMiniForm(!showMiniForm)} >
-        Registrar nuevo Insumo
-      </button>
-      </div>
+  return (
+    <div className="kardex-page">
+      <div className="tirillas-wrapper">
+        {/* 🔹 Botón de volver */}
+        <div className="botones-top">
+          <button className="btn-volver" onClick={handleVolver}>
+             Volver
+          </button>
 
-      {showMiniForm && (
-        <div className="form-mini">
-          <label>
-            Mes:
-            <input
-              type="month"
-              value={preData.mes_registro}
-              onChange={e => setPreData({ ...preData, mes_registro: e.target.value })}
-            />
-          </label>
-          <label>
-            Categoría:
-            <select
-              value={preData.categoria}
-              onChange={e => setPreData({ ...preData, categoria: e.target.value ? parseInt(e.target.value) : "" })}
-            >
-              <option value="">Seleccione...</option>
-              {categorias.map(c => (
-                <option key={c.id_categoria} value={c.id_categoria}>{c.nombre}</option>
-              ))}
-            </select>
-          </label>
-          <button className="btn-confirmar" onClick={handleConfirmarMiniForm}>
-            Confirmar
+          <button className="btn-registrar" onClick={() => setShowMiniForm(!showMiniForm)} >
+            Registrar nuevo Insumo
           </button>
         </div>
-      )}
-        
-        {/*Buscar kardex*/}
-      <div className="buscar-insumos">
-        <input placeholder="Nombre" value={filtroNombre} onChange={e => setFiltroNombre(e.target.value)} />
-        <input placeholder="Laboratorio" value={filtroLaboratorio} onChange={e => setFiltroLaboratorio(e.target.value)} />
-        <input placeholder="Lote" value={filtroLote} onChange={e => setFiltroLote(e.target.value)} />
-        <input type="date" value={desde} onChange={e => setDesde(e.target.value)} />
-        <input type="date" value={hasta} onChange={e => setHasta(e.target.value)} />
-        <button onClick={buscarInsumos}>Buscar</button>
-      </div>
 
-      {showInsumosForm && (
-      <Insumos preData={preData} onNuevoRegistro={handleNuevaTirilla} 
-      onBack={() => setShowInsumosForm(false)} />
-      )}
+        {showMiniForm && (
+          <div className="form-mini">
+            <label>
+              Mes:
+              <input
+                type="month"
+                value={preData.mes_registro}
+                onChange={e => setPreData({ ...preData, mes_registro: e.target.value })}
+              />
+            </label>
+            <label>
+              Categoría:
+              <select
+                value={preData.categoria}
+                onChange={e => setPreData({ ...preData, categoria: e.target.value ? parseInt(e.target.value) : "" })}
+              >
+                <option value="">Seleccione...</option>
+                {categorias.map(c => (
+                  <option key={c.id_categoria} value={c.id_categoria}>{c.nombre}</option>
+                ))}
+              </select>
+            </label>
+            <button className="btn-confirmar" onClick={handleConfirmarMiniForm}>
+              Confirmar
+            </button>
+          </div>
+        )}
 
-         {/* 📤 Exportar a Excel */}
-      <div className="Exportar">
-        <select
-          value={categoriaSeleccionada}
-          onChange={e => setCategoriaSeleccionada(e.target.value)}
-        >
-          <option value="">Seleccionar categoría</option>
-          {categorias.map(c => (
-            <option key={c.id_categoria} value={c.nombre}>{c.nombre}</option>
-          ))}
-        </select>
-     
+        {/*Buscar insumos*/}
+        <div className="buscar-kardex">
+          <input placeholder="Nombre" value={filtroNombre} onChange={e => setFiltroNombre(e.target.value)} />
+          <input placeholder="Laboratorio" value={filtroLaboratorio} onChange={e => setFiltroLaboratorio(e.target.value)} />
+          <input placeholder="Factura" value={filtroFactura} onChange={e => setFiltroFactura(e.target.value)} />
+          <input placeholder="Lote" value={filtroLote} onChange={e => setFiltroLote(e.target.value)} />
+          <input type="date" value={desde} onChange={e => setDesde(e.target.value)} />
+          <input type="date" value={hasta} onChange={e => setHasta(e.target.value)} />
+          <button onClick={buscarInsumos}>Buscar</button>
+        </div>
+
+        {showInsumosForm && (
+          <Insumos preData={preData} onNuevoRegistro={handleNuevaTirilla}
+            onBack={() => setShowInsumosForm(false)} />
+        )}
+
+        {/* 📤 Exportar a Excel */}
+        <div className="Exportar">
+
+          <label>
+            Mes:
             <select value={mes} onChange={e => setMes(e.target.value)}>
-              <option value="">Seleccionar mes</option>
+              <option value="">Seleccione...</option>
               <option value="Enero">Enero</option>
               <option value="Febrero">Febrero</option>
               <option value="Marzo">Marzo</option>
@@ -231,67 +236,126 @@ export default function InsumosPage() {
               <option value="Mayo">Mayo</option>
               <option value="Junio">Junio</option>
               <option value="Julio">Julio</option>
-               <option value="Agosto">Agosto</option>
-               <option value="Septiembre">Septiembre</option>
+              <option value="Agosto">Agosto</option>
+              <option value="Septiembre">Septiembre</option>
               <option value="Octubre">Octubre</option>
               <option value="Noviembre">Noviembre</option>
-                <option value="Diciembre">Diciembre</option>
-              {/* ...los demás meses */}
+              <option value="Diciembre">Diciembre</option>
             </select>
+          </label>
 
+          <label>
+            Categoría:
+            <select
+              value={categoriaSeleccionada}
+              onChange={e => setCategoriaSeleccionada(e.target.value)}
+            >
+              <option value="">Seleccione...</option>
+              {categorias.map(c => (
+                <option key={c.id_categoria} value={c.nombre}>{c.nombre}</option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Año:
             <select value={anioSeleccionado} onChange={e => setAnioSeleccionado(e.target.value)}>
-             {años.map(a => (
-              <option key={a} value={a}>{a}</option>
-            ))}
-              </select>
+              {años.map(a => (
+                <option key={a} value={a}>{a}</option>
+              ))}
+            </select>
+          </label>
 
           <button
-               className="btn-exportar"
-              onClick={() => exportarInsumos(tirillas, categoriaSeleccionada, mes, anioSeleccionado)}
-               disabled={!categoriaSeleccionada || !mes || !anioSeleccionado}
+            className="btn-exportar"
+            onClick={() => exportarInsumos(tirillas, categoriaSeleccionada, mes, anioSeleccionado)}
+            disabled={!categoriaSeleccionada || !mes || !anioSeleccionado}
+          >
+            Exportar
+          </button>
+        </div>
 
-                 >
-               Exportar
-               </button>
-         </div>
-              
-      <InsumosListaTirillas
-        tirillas={tirillas}
+        <InsumosListaTirillas
+          tirillas={tirillas}
           initialSelectedId={openId}
-        onActualizarTirilla={(tirilla) => {
-          setShowInsumosForm(true);
-          setPreData({
-            ...tirilla.detalle,
-            id_insumo: tirilla.detalle.id_insumo,
-            categoria: tirilla.detalle.id_categoria || ""
-          });
-        }}
-        onEliminarTirilla={async (tirilla) => {
-          if (!window.confirm("¿Seguro que quieres eliminar este insumo?")) return;
-
-          try {                
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/insumos/${tirilla.detalle.id_insumo}`,{
-              method: "DELETE",
-               headers: { 
-                       "Content-Type": "application/json",
-                       "Authorization": `Bearer ${token}`},
-               body: JSON.stringify({ usuarioId: localStorage.getItem("usuarioId") 
-                
-              })
+          onActualizarTirilla={(tirilla) => {
+            setShowInsumosForm(true);
+            setPreData({
+              ...tirilla.detalle,
+              id_insumo: tirilla.detalle.id_insumo,
+              categoria: tirilla.detalle.id_categoria || ""
             });
+          }}
 
-            if (res.ok) {
-              setTirillas(prev => prev.filter(t => t.detalle.id_insumo !== tirilla.detalle.id_insumo));
-            } else {
-              const data = await res.json();
-              alert("Error eliminando insumo: " + data.message);
+          onActualizarPagoFactura={async ({ factura, pagado }) => {
+            try {
+              const res = await fetch(`${import.meta.env.VITE_API_URL}/insumos/pagado/${factura}`,{ 
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  factura,
+                  pagado: Number(pagado),
+                  id_sede: idSede
+                })
+              });
+
+              if (!res.ok) {
+                console.error("❌ Error al actualizar pago");
+                return;
+              }
+
+              // 🔥 RECARGAR LISTA COMPLETA
+              const recargar = await fetch(`${import.meta.env.VITE_API_URL}/insumos?id_sede=${idSede}`,{
+                headers: { "Authorization": `Bearer ${token}` }
+              });
+
+              const nuevos = await recargar.json();
+
+              setTirillas(
+                nuevos.map(r => ({
+                  fecha: r.fecha,
+                  descripcion: r.nombre_del_insumo || r.lote || "Registro insumos",
+                  detalle: r // 👈 AQUÍ viene el pagado actualizado
+                }))
+              );
+
+            } catch (error) {
+              console.error("Error actualizando pago:", error);
             }
-          } catch (error) {
-            console.error("Error al eliminar insumo:", error);
-            alert("Error eliminando insumo");
-          }
-        }}
-      />
+          }}
+
+          onEliminarTirilla={async (tirilla) => {
+            if (!window.confirm("¿Seguro que quieres eliminar este insumo?")) return;
+
+            try {
+              const res = await fetch(`${import.meta.env.VITE_API_URL}/insumos/${tirilla.detalle.id_insumo}`,{
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  usuarioId: localStorage.getItem("usuarioId")
+
+                })
+              });
+
+              if (res.ok) {
+                setTirillas(prev => prev.filter(t => t.detalle.id_insumo !== tirilla.detalle.id_insumo));
+              } else {
+                const data = await res.json();
+                alert("Error eliminando insumo: " + data.message);
+              }
+            } catch (error) {
+              console.error("Error al eliminar insumo:", error);
+              alert("Error eliminando insumo");
+            }
+          }}
+        />
+      </div>
     </div>
   );
 }

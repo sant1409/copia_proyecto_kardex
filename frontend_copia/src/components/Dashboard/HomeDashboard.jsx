@@ -49,7 +49,7 @@ export default function HomeDashboard() {
               download="Manual del Sistema de Kardex.pdf"
               className="pdf-download"
             >
-             ⬇️ Descargar manual
+              ⬇️ Descargar manual
             </a>
           </div>
 

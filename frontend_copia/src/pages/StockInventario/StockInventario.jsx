@@ -108,14 +108,14 @@ export default function StockInventario() {
   return (
     <div>
 
-      <button className="btn-volver" onClick={handleVolver}>
-        ← Volver
-      </button>
+     
       
       {/* Listado */}
       <div className="stock-container">
+         <button className="btn-volver" onClick={handleVolver}>
+             Volver
+             </button>
         <h2>Stock Inventario</h2>
-
       <div className="stock-filtros">
         <select name="tipo" value={inputs.tipo} onChange={handleInputChange}>
           <option value="">Todos</option>

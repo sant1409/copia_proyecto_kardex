@@ -139,8 +139,10 @@ export default function Registro() {
                
       )}
       
+      
       {paso === "verificar" && (
          
+
             <div className="registrarse-container">
         <form className="registro-form" onSubmit={handleSubmitVerificacion}>
               <h2>Verificar correo</h2>

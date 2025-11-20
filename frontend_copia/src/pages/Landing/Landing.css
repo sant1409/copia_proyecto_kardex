@@ -30,8 +30,9 @@
   align-items: center;
   width: 100%;
 }
-
-/* BOTONES LOGIN / REGISTRO */
+/* ======================
+| BOTONES LOGIN / REGISTRO
+======================*/
 .botones-landing {
   display: flex;
   gap: 12px;
@@ -41,33 +42,22 @@
 .botones-landing button {
   padding: 10px 20px;
   border: none;
-  background-color: #ddd;
+  background-color: #080808; /* fondo oscuro */
   border-radius: 6px;
   cursor: pointer;
   font-size: 15px;
-  transition: 0.3s;
+  font-weight: 500;
+  color: #fff; /* texto blanco */
+  transition: color 0.3s ease;
 }
 
 .botones-landing button:hover {
-  background-color: #ccc;
+  color: #00bcd4; 
 }
 
 .botones-landing button.activo {
   background-color: #080808;
-  color: white;
-}
-
-/* FORMULARIOS LOGIN / REGISTRO */
-.formularios-landing {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.formularios-landing > .iniciarsesion-container,
-.formularios-landing > .registrarse-container {
-  width: 100%;
-  max-width: 400px;
+  color: #fff;
 }
 
 /* LOGO ABAJO */

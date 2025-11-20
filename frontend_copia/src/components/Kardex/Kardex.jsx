@@ -258,9 +258,9 @@ if (preData && preData.id_kardex) {
 
     try {
          // ✅ Si hay preData.id → actualizar, sino crear
-        const url = preData && preData.id_kardex
-  ? `${import.meta.env.VITE_API_URL}/kardex/${preData.id_kardex}`
-  : `${import.meta.env.VITE_API_URL}/kardex`;
+      const url = preData && preData.id_kardex
+      ? `${import.meta.env.VITE_API_URL}/kardex/${preData.id_kardex}`
+      : `${import.meta.env.VITE_API_URL}/kardex`;
           
       const metodo = preData && preData.id_kardex ? "PUT" : "POST";
 
@@ -350,19 +350,13 @@ if (typeof onNuevoRegistro === "function") {
   
 return (
   <div className="kardex-container">
+     {/* 🔹 Botón cerrar */}
+    <div className="btn-cerrar">
+      <button onClick={onBack}>Cerrar</button>
+    </div>
+
     {mensaje && <div className="mensaje">{mensaje}</div>}
     <h2 className="kardex-title">Registrar Kardex</h2>
-
-    {/* 🔹 Botón cerrar */}
-    <div className="btn-cerrar">
-      <button
-        type="button"
-        onClick={onBack}
-        style={{ fontSize: "18px", cursor: "pointer" }}
-      >
-        ← Cerrar
-      </button>
-    </div>
 
     <form onSubmit={handleSubmit} className="kardex-form">
       {camposVisibles.map((key) => (
@@ -489,7 +483,7 @@ return (
         </div>
       ))}
       <div className="kardex-button">
-        <button type="submit">Guardar</button>
+          <button type="submit" className="kardex-submit">Guardar</button>
       </div>
     </form>
   </div>

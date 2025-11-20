@@ -1,11 +1,20 @@
 .perfil-container {
-  color: black; /* cambia el color de todo el texto dentro */
+  color: white;
+  overflow-x: auto;       /* activa scroll horizontal */
+  white-space: nowrap;    /* evita que el contenido se baje */
+  padding-bottom: 10px;   /* espacio para que se vea bien el scroll */
 }
 
-.perfil-container h2 {
-  color: black; /* opcional: cambiar el título también */
+/* Opcional: estilo del scrollbar */
+.perfil-container::-webkit-scrollbar {
+  height: 8px;
 }
 
-.perfil-container p {
-  color: black;
+.perfil-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.perfil-container::-webkit-scrollbar-track {
+  background: #1a1a1a;
 }

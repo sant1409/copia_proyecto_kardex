@@ -1,31 +1,34 @@
-/* === Panel de Links (como el de notificaciones) === */
+/* === Panel de Links estilo Dashboard === */
 .links-panel {
   position: fixed;
-  top: 60px; /* mismo margen que las notificaciones */
+  top: 70px; /* margen similar a notificaciones */
   right: 20px;
-  width: 1000px;
-  max-height: 500px;
-  background: #fff;
-  border: 1px solid #ccc;
-  overflow-y: auto;
-  padding: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  border-radius: 10px;
+  width: min(1000px, 90%);
+  max-height: 80vh;
+  background: var(--color-primary-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 20px var(--shadow-dark);
+  padding: 20px;
   z-index: 1000;
-  scrollbar-width: thin;
-  scrollbar-color: #000000 #f1f1f1;
+  overflow-y: auto;
+  transition: transform var(--transition-speed), opacity var(--transition-speed);
 }
 
-/* Botón de cerrar */
-.cerrar-panel {
-  background: none;
-  border: none;
-  float: right;
-  cursor: pointer;
-  font-size: 18px;
+/*Scroll*/
+.links-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.links-panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+.links-panel::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 8px;
 }
 
-/* Contenedor interno (antes .links_casas-container) */
+
+/* Contenedor interno */
 .links_casas-container {
   display: flex;
   flex-direction: column;
@@ -36,64 +39,207 @@
 .links_casas-container h2 {
   margin: 0;
   text-align: center;
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
 }
 
 /* Mensaje */
 .mensaje-links {
   text-align: center;
-  font-size: 0.9rem;
-  color: #444;
-  background: #f0f0f0;
-  border-radius: 6px;
-  padding: 6px;
+  font-size: 0.95rem;
+  color: var(--color-text-dark);
+  background: #f9f9f9;
+  border-radius: var(--border-radius);
+  padding: 8px;
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
 }
 
 /* Formulario */
 .form-links-casas {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
 }
 
 .form-links-casas input {
-  padding: 6px 8px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
   border: 1px solid #ccc;
-  width: 40%;
+  width: 45%;
+  font-size: 1rem;
+  transition: border-color var(--transition-speed);
+}
+.form-links-casas input:focus {
+  border-color: var(--color-accent);
+  outline: none;
 }
 
+/* Botones estilo Dashboard */
 .form-links-casas button {
-  background-color: #080808;
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
   border: none;
-  border-radius: 6px;
-  padding: 6px 10px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--color-text-light);
+  background: var(--color-secondary-bg);
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
+  transition: all var(--transition-speed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .form-links-casas button:hover {
-  background-color: #0f72ce;
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 8px var(--shadow-light), -2px -2px 8px var(--shadow-dark);
+  color: var(--color-accent);
 }
 
 /* Tabla */
 .tabla-links-casas {
   overflow-x: auto;
+  border-radius: var(--border-radius);
+  margin-top: 10px;
 }
 
-/* Botones dentro de la tabla */
-td button {
-  background: none;
+.tabla-links-casas table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Alinear texto a la izquierda */
+.tabla-links-casas td:first-child,
+.tabla-links-casas td:nth-child(2) {
+  text-align: left !important;
+}
+
+/* Alinear botones a la derecha */
+.tabla-links-casas td:last-child {
+  text-align: right !important;
+}
+
+/* Estilo general de celdas */
+.tabla-links-casas th,
+.tabla-links-casas td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Contenedor de botones (actualizar → eliminar) */
+.acciones-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Estilos de los botones dentro de la tabla */
+.acciones-btns button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
-  font-size: 1rem;
-  margin-right: 4px;
-  transition: transform 0.2s ease;
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+  background: var(--color-secondary-bg);
+  box-shadow: 1px 1px 4px var(--shadow-light), -1px -1px 4px var(--shadow-dark);
+  transition: all var(--transition-speed);
 }
 
-td button:hover {
-  transform: scale(1.2);
+.acciones-btns button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 2px 2px 6px var(--shadow-light), -2px -2px 6px var(--shadow-dark);
+  color: var(--color-accent);
 }
+
+/* === Responsivo === */
+@media (max-width:1024px) {
+  .links-panel { width: 80%; right: 10px; top: 60px; padding: 15px; }
+  .form-links-casas input { width: 48%; }
+}
+
+@media (max-width:768px) {
+  .links-panel {
+    width: 95%;
+    top: 60px;
+    right: 2.5%;
+    max-height: 75vh;
+    padding: 12px;
+  }
+  .form-links-casas input { width: 100%; }
+  .tabla-links-casas th, .tabla-links-casas td { font-size: 0.85rem; }
+}
+
+@media (max-width:480px) {
+  .links-panel { top: 50px; padding: 10px; }
+  .form-links-casas button { font-size: 0.85rem; padding: 8px 12px; }
+}
+/* Alineación perfecta de columnas */
+.tabla-links-casas th,
+.tabla-links-casas td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle; /* ← Esto asegura que no queden bajados */
+  white-space: nowrap;
+}
+
+/* Columna ID centrada */
+.tabla-links-casas th:nth-child(1),
+.tabla-links-casas td:nth-child(1) {
+  width: 60px;
+  text-align: center;
+}
+
+/* Columna Nombre alineada sin saltos feos */
+.tabla-links-casas th:nth-child(2),
+.tabla-links-casas td:nth-child(2) {
+  width: 20%;
+  white-space: normal; /* permite varias líneas */
+}
+
+/* Columna Link amplia y alineada */
+.tabla-links-casas th:nth-child(3),
+.tabla-links-casas td:nth-child(3) {
+  width: 60%;
+  word-break: break-word;
+  white-space: normal; /* ← evita que se suban o bajen */
+}
+
+/* Inputs dentro de la tabla sin romper la alineación */
+.tabla-links-casas td input {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box; /* ← evita desbordes */
+  font-size: 0.9rem;
+}
+
+/* Centrar la columna LINK */
+.tabla-links-casas th:nth-child(3),
+.tabla-links-casas td:nth-child(3) {
+  text-align: center !important;
+}
+
+@media (max-width:480px) {
+  .tabla-links-casas th:nth-child(3),
+  .tabla-links-casas td:nth-child(3) {
+    white-space: normal !important;
+    font-size: 0.75rem;
+  }
+
+  .tabla-links-casas td a {
+    display: block;
+    text-align: center;
+    word-break: break-all;
+  }
+}
+
