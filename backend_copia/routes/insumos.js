@@ -163,12 +163,16 @@ router.post('/', verificarToken, async (req, res) => {
     const idClasificacion = await obtenerOcrearFK(pool, 'clasificacion', 'clasificacion', id_clasificacion, id_sede);
     const idCategoria = await obtenerOcrearFK(pool, 'categoria', 'categoria', id_categoria, id_sede);
 
+    // Normalizar salida vacía
+    if (salida === "" || salida === undefined) salida = null;
+
     // ❌ Restricción: no permitir 'salida' en la creación
-    if (salida !== undefined && salida !== null && Number(salida) > 0) {
+    if (salida !== null && Number(salida) > 0) {
       return res.status(400).json({
         error: "No se puede asignar una salida al crear un insumo. La salida solo puede registrarse al actualizar un insumo."
       });
     }
+
 
     const [result] = await pool.query(
       `INSERT INTO insumos (
@@ -247,7 +251,7 @@ router.get('/buscar_insumos', verificarToken, async (req, res) => {
     valores.push(`%${laboratorio}%`);
   }
 
-   if (factura) {
+  if (factura) {
     condiciones.push("i.factura LIKE ?");
     valores.push(`%${factura}%`);
   }
@@ -561,7 +565,7 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
- 
+
 
 // ✅ Actualizar estado de pago por factura (por sede)
 router.put('/pagado/:factura', verificarToken, async (req, res) => {
