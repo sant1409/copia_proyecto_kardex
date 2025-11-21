@@ -185,7 +185,7 @@ router.post('/', verificarToken, async (req, res) => {
         consumible, mes_registro, id_categoria, usuarioId, id_sede
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
-        fecha, temperatura, cantidad, salida, saldo, idNombreDelInsumo, idPresentacion,
+        fecha, temperatura, cantidad, salidaNormalized, saldo, idNombreDelInsumo, idPresentacion,
         idLaboratorio, idProveedor, lote, fecha_de_vto, registro_invima, expediente_invima,
         idClasificacion, estado_de_revision, salida_fecha, inicio, termino,
         lab_sas, factura, costo_global, costo, costo_prueba, costo_unidad, iva,
