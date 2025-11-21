@@ -5,9 +5,10 @@
  * y permite el acceso a rutas protegidas agregando la información del usuario a req.
  */
 
-
 const jwt = require('jsonwebtoken');
-const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
+
+// 🔐 La clave debe venir SIEMPRE del .env
+const claveSecreta = process.env.JWT_SECRET;
 
 // 🔒 Middleware para verificar token
 function verificarToken(req, res, next) {
