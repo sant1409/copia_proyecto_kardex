@@ -193,6 +193,10 @@ const costoCajaNormalized =
   const costoPruebaNormalized =
   costo_prueba === "" || costo_prueba === undefined ? null : costo_prueba;
 
+   const IvaNormalized =
+   iva === "" || iva === undefined ? null : iva;
+
+
 
 
     //  Insertar kardex
@@ -210,7 +214,7 @@ const costoCajaNormalized =
         idPresentacion, idCasacomercial, idProveedor, lote, fecha_vencimiento, registro_invima, expediente_invima,
         estado_revision, temperatura_almacenamiento, idClasificacionRiesgo, principio_activo, forma_farmaceutica,
         concentracion, unidad_medida, fechaSalidaNormalized, fecha_inicio, fecha_terminacion, area, factura,
-        costoGeneralNormalized, costoCajaNormalized, costoPruebaNormalized, iva, consumible, mes_registro, lab_sas, usuarioId, id_sede
+        costoGeneralNormalized, costoCajaNormalized, costoPruebaNormalized, IvaNormalized , consumible, mes_registro, lab_sas, usuarioId, id_sede
       ]
     );
 
