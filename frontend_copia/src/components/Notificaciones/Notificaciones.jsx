@@ -12,7 +12,7 @@ export default function Notificaciones() {
 
   const fetchNotificaciones = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/notificaciones?id_sede=${id_sede}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/notificaciones?id_sede=${id_sede}`, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -29,7 +29,7 @@ export default function Notificaciones() {
 
   const marcarLeida = async (id) => {
     try {
-      await fetch(`http://localhost:3000/notificaciones/${id}/leida`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/notificaciones/${id}/leida`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
