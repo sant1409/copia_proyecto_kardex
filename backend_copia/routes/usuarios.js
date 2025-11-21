@@ -33,180 +33,187 @@ const transporte = nodemailer.createTransport({
 
 // registrar un usuario
 router.post('/registrarse', async (req, res) => {
-    const { correo, nombre, contraseña, id_sede	 } = req.body;
-    if (!correo || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(correo,)) {
-        return res.status(400).json ({error: 'Correo invalido o faltante'});
+    const { correo, nombre, contraseña, id_sede } = req.body;
+
+    if (!correo || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(correo)) {
+        return res.status(400).json({ error: 'Correo inválido o faltante' });
     }
 
-    if (!nombre || nombre.trim() === ''){
-        return res.status(400).json ({error: 'El nombre es obligatorio'});
+    if (!nombre || nombre.trim() === '') {
+        return res.status(400).json({ error: 'El nombre es obligatorio' });
     }
 
     if (!contraseña || contraseña.length < 6) {
-        return res.status(400).json({error: 'La contraseña debe tener almenos 6 caracteres'});
+        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }
 
     if (!id_sede) {
-        return res.status(400).json({error: 'La sede es obligatoria'});
+        return res.status(400).json({ error: 'La sede es obligatoria' });
     }
 
     try {
-       
         const contraseñaEncriptada = await bcrypt.hash(contraseña, 10);
 
-        //Crear un codigo aleatorio de verificacion
-        const codigo = String(Math.floor(100000 + Math.random () * 900000));
-         console.log(codigo);
+        // Crear código de verificación
+        const codigo = String(Math.floor(100000 + Math.random() * 900000));
+        console.log("Código generado:", codigo);
 
-          // Enviar correo
+        // Enviar correo
         await transporte.sendMail({
-            from: '"Mi APP" <automatizarkardex@gmail.com>',
+            from: `"Mi APP" <${process.env.EMAIL_USER}>`,
             to: correo,
             subject: "Verificar tu cuenta",
-            text: `Tu código de verificación es: ${codigo}`
+            text: `Tu código de verificación es: ${codigo}`,
         });
 
         const [result] = await pool.query(
-            'INSERT INTO usuarios (correo, nombre, contraseña, id_sede,  codigo_verificacion) VALUES (?, ?, ?, ?, ?)',
-            [correo, nombre, contraseñaEncriptada,  id_sede, codigo ] 
-
+            'INSERT INTO usuarios (correo, nombre, contraseña, id_sede, codigo_verificacion) VALUES (?, ?, ?, ?, ?)',
+            [correo, nombre, contraseñaEncriptada, id_sede, codigo]
         );
 
-        res.status(201).json({ message: 'Usuario registrado. revisa tu correo para verificar la cuenta!', id_usuario: result.insertId });
+        res.status(201).json({
+            message: 'Usuario registrado. Revisa tu correo para verificar la cuenta!',
+            id_usuario: result.insertId
+        });
+
     } catch (error) {
+        console.error("Error registrando usuario:", error);
+
         if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({error: 'El correo ya esta registrado'});
+            return res.status(400).json({ error: 'El correo ya está registrado' });
         }
+
         res.status(500).json({ error: error.message });
     }
 });
 
+
 //Iniciar-sesion
 router.post('/iniciar_sesion', async (req, res) => {
-  const { correo, contraseña } = req.body;
+    const { correo, contraseña } = req.body;
 
-  if (!correo || !contraseña) {
-    return res.status(400).json({ error: 'Correo y contraseña requeridos' });
-  }
-
-  try {
-    const [rows] = await pool.query(
-      'SELECT * FROM usuarios WHERE correo = ?', [correo]
-    );
-
-    if (rows.length === 0) {
-      return res.status(401).json({ mensaje: 'Correo no registrado' });
+    if (!correo || !contraseña) {
+        return res.status(400).json({ error: 'Correo y contraseña requeridos' });
     }
 
-    const usuario = rows[0];
-    if (!usuario.verificado) {
-      return res.status(403).json({ error: 'Cuenta no verificada' });
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM usuarios WHERE correo = ?', [correo]
+        );
+
+        if (rows.length === 0) {
+            return res.status(401).json({ mensaje: 'Correo no registrado' });
+        }
+
+        const usuario = rows[0];
+        if (!usuario.verificado) {
+            return res.status(403).json({ error: 'Cuenta no verificada' });
+        }
+
+        const coincide = await bcrypt.compare(contraseña, usuario.contraseña);
+        if (!coincide) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+
+        // Crear token con la info del usuario
+        const token = jwt.sign(
+            {
+                id_usuario: usuario.id_usuario,
+                nombre: usuario.nombre,
+                correo: usuario.correo,
+                id_sede: usuario.id_sede
+            },
+            claveSecreta,
+            { expiresIn: '1d' } // dura 1 día
+        );
+
+        res.json({
+            mensaje: 'Inicio de sesión exitoso',
+            token
+        });
+
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error en el servidor' });
     }
-
-    const coincide = await bcrypt.compare(contraseña, usuario.contraseña);
-    if (!coincide) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
-
-    // Crear token con la info del usuario
-    const token = jwt.sign(
-      {
-        id_usuario: usuario.id_usuario,
-        nombre: usuario.nombre,
-        correo: usuario.correo,
-        id_sede: usuario.id_sede
-      },
-      claveSecreta,
-      { expiresIn: '1d' } // dura 1 día
-    );
-
-    res.json({
-      mensaje: 'Inicio de sesión exitoso',
-      token
-    });
-
-  } catch (error) {
-    res.status(500).json({ mensaje: 'Error en el servidor' });
-  }
 });
 
 // Ruta de verificacion correo 
 router.post('/verificar', async (req, res) => {
-    const {correo, codigo} = req.body;
+    const { correo, codigo } = req.body;
     const [rows] = await pool.query(
         'SELECT * FROM usuarios WHERE correo = ?', [correo]);
-        if (rows.length === 0) return res.status(404).json({error: 'Usuario no encontrado'});
+    if (rows.length === 0) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-        const usuario  = rows[0];
+    const usuario = rows[0];
 
-        if (usuario.codigo_verificacion != codigo) {
-            return res.status(400).json({error: 'Codigo incorrecto'});
-        }
+    if (usuario.codigo_verificacion != codigo) {
+        return res.status(400).json({ error: 'Codigo incorrecto' });
+    }
 
-        // Activar usuario
-        await pool.query('UPDATE usuarios SET verificado = 1, codigo_verificacion = NULL WHERE correo= ?', [correo]);
-        res.json({message: 'Cuenta verificada correctamente'});
+    // Activar usuario
+    await pool.query('UPDATE usuarios SET verificado = 1, codigo_verificacion = NULL WHERE correo= ?', [correo]);
+    res.json({ message: 'Cuenta verificada correctamente' });
 });
 
 // cerra sesion 
 
 
-router.post('/cerrar_sesion', async (req, res)=> {
-    req.session.destroy(err =>{
+router.post('/cerrar_sesion', async (req, res) => {
+    req.session.destroy(err => {
         if (err) {
-            return res.status(500).json({mensaje: 'Error al cerrar sesión'});  
+            return res.status(500).json({ mensaje: 'Error al cerrar sesión' });
         }
         res.clearCookie('connect.sid');
-        res.json({mensaje: 'Sesión cerrada correctamente'})
+        res.json({ mensaje: 'Sesión cerrada correctamente' })
     });
 });
 
 // recuperar contraseña
-router.post('/recuperar_clave', async (req, res)=>{
-    const {correo}= req.body;
+router.post('/recuperar_clave', async (req, res) => {
+    const { correo } = req.body;
 
     if (!correo || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(correo)) {
         return res.status(400).json({ error: 'Correo inválido o faltante' });
-    } 
+    }
     try {
 
         const [rows] = await pool.query('SELECT * FROM usuarios WHERE correo = ?', [correo]);
         if (rows.length === 0) {
-            return res.status(404).json({error: "Correo no registrado"});
-        }        
-    const codigo = String(Math.floor(100000 + Math.random() * 900000));
+            return res.status(404).json({ error: "Correo no registrado" });
+        }
+        const codigo = String(Math.floor(100000 + Math.random() * 900000));
 
-    await pool.query('UPDATE usuarios SET codigo_recuperacion  = ? where correo = ?', [codigo, correo]);
+        await pool.query('UPDATE usuarios SET codigo_recuperacion  = ? where correo = ?', [codigo, correo]);
 
-    await transporte.sendMail ({
-        from: '"Mi APP" <automatizarkardex@gmail.com>',
-        to: correo,
-        subject: "Recuperar contraseña",
-        text: `Tu codigo de recuperacion es: ${codigo}`
-    });
+        await transporte.sendMail({
+            from: '"Mi APP" <automatizarkardex@gmail.com>',
+            to: correo,
+            subject: "Recuperar contraseña",
+            text: `Tu codigo de recuperacion es: ${codigo}`
+        });
 
 
-        res.json({mensaje: 'Código enviado al correo'});
-    } catch (error){
+        res.json({ mensaje: 'Código enviado al correo' });
+    } catch (error) {
         console.error(error);
-        res.status(500).json({mensaje: 'Error en el servidor'});
+        res.status(500).json({ mensaje: 'Error en el servidor' });
     }
 });
 
 // Cambiar la contraseña
 router.post('/resetear_clave', async (req, res) => {
-    const {codigo, nuevaContraseña} = req.body;
+    const { codigo, nuevaContraseña } = req.body;
 
     if (!nuevaContraseña || nuevaContraseña.length < 6) {
-        return res.status(400).json({error: 'La nueva contraseña debe de tener al menos 6 caracteres'});
+        return res.status(400).json({ error: 'La nueva contraseña debe de tener al menos 6 caracteres' });
     }
 
     try {
         const [rows] = await pool.query(
             'SELECT * FROM usuarios WHERE codigo_recuperacion = ?',
-            [ codigo]
+            [codigo]
         );
 
         if (rows.length === 0) {
-            return res.status(400).json({error: 'Código incorrecto'});
+            return res.status(400).json({ error: 'Código incorrecto' });
         }
 
         const contraseñaEncriptada = await bcrypt.hash(nuevaContraseña, 10);
@@ -216,18 +223,18 @@ router.post('/resetear_clave', async (req, res) => {
             [contraseñaEncriptada, rows[0].id_usuario]
         );
 
-        res.json({message: 'Contraseña actualizada correctamente'});
+        res.json({ message: 'Contraseña actualizada correctamente' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({mensaje: 'Error en el servidor'});
+        res.status(500).json({ mensaje: 'Error en el servidor' });
     }
 });
 
 
 // verificar el codigo para cambiar la contraseña
 
-router.post('/verificar_codigo', async(req, res) => {
-    const {correo, codigo} = req.body
+router.post('/verificar_codigo', async (req, res) => {
+    const { correo, codigo } = req.body
     try {
         const [rows] = await pool.query(
             'SELECT * FROM usuarios WHERE correo  = ? AND codigo_recuperacion = ?',
@@ -235,16 +242,16 @@ router.post('/verificar_codigo', async(req, res) => {
         );
 
         if (rows.length === 0) {
-            return res.status(400).json({error: 'Código incorrecto'});
+            return res.status(400).json({ error: 'Código incorrecto' });
         }
 
-        res.json({message: 'Código válido, puedes cambiar la contraseña'});
+        res.json({ message: 'Código válido, puedes cambiar la contraseña' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({mensaje: 'Error en el servidor'});
+        res.status(500).json({ mensaje: 'Error en el servidor' });
     }
 });
-        
+
 
 // Modificar usuario
 router.put('/:id_usuario', async (req, res) => {
@@ -256,15 +263,15 @@ router.put('/:id_usuario', async (req, res) => {
     }
 
     if (!nombre || nombre.trim() === '') {
-        return res.status(400).json({error: ' El nombre es obligatorio '});
+        return res.status(400).json({ error: ' El nombre es obligatorio ' });
     }
 
-    if  (!contraseña || contraseña.length < 6) {
-        return res.status(400).json({error: 'La contraseña debede tener al menos 6 caracteristicas'})
+    if (!contraseña || contraseña.length < 6) {
+        return res.status(400).json({ error: 'La contraseña debede tener al menos 6 caracteristicas' })
     }
 
-    if (isNaN (id_usuario)) {
-        return res.status(400).json ({error: 'ID de usuario invalido'});
+    if (isNaN(id_usuario)) {
+        return res.status(400).json({ error: 'ID de usuario invalido' });
     }
 
     try {
@@ -281,7 +288,7 @@ router.put('/:id_usuario', async (req, res) => {
         res.json({ message: 'Usuario actualizado exitosamente', result });
     } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({error: 'El correo ya esta registrado'})
+            return res.status(400).json({ error: 'El correo ya esta registrado' })
         }
         res.status(500).json({ error: error.message });
     }
@@ -289,11 +296,11 @@ router.put('/:id_usuario', async (req, res) => {
 
 //Verificar si el usuario si quedo en la sesion
 router.get('/sesion', verificarToken, async (req, res) => {
-  const { id_usuario, nombre, correo, id_sede } = req.usuario;
-  res.json({
-    mensaje: 'Perfil accedido correctamente',
-    usuario: { id_usuario, nombre, correo, id_sede }
-  });
+    const { id_usuario, nombre, correo, id_sede } = req.usuario;
+    res.json({
+        mensaje: 'Perfil accedido correctamente',
+        usuario: { id_usuario, nombre, correo, id_sede }
+    });
 });
 
 
@@ -342,8 +349,8 @@ router.get('/', async (req, res) => {
 router.delete('/:id_usuario', async (req, res) => {
     const { id_usuario } = req.params;
 
-    if (isNaN (id_usuario)) {
-        return res.status(400).json ({error: 'ID de usuario invalido'});
+    if (isNaN(id_usuario)) {
+        return res.status(400).json({ error: 'ID de usuario invalido' });
     }
 
     try {
