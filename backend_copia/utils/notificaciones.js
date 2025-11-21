@@ -36,11 +36,30 @@ async function crearNotificacion({ tipo, id_kardex = null, id_insumo = null, men
   const id_insumo_nn = id_insumo ?? 0;
   const fecha_evento_date = fecha_evento ? new Date(fecha_evento).toISOString().split('T')[0] : null;
 
+  // Normalizar/validar valor para la columna DATETIME `fecha_evento`.
+  // Evitar pasar valores inválidos o '0000-00-00 00:00:00' que provocan error en MySQL.
+  let fecha_evento_datetime = null;
+  if (fecha_evento) {
+    const s = String(fecha_evento);
+    if (!s.startsWith('0000-00-00')) {
+      const d = new Date(fecha_evento);
+      if (!isNaN(d.getTime())) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mi = String(d.getMinutes()).padStart(2, '0');
+        const ss = String(d.getSeconds()).padStart(2, '0');
+        fecha_evento_datetime = `${y}-${m}-${dd} ${hh}:${mi}:${ss}`;
+      }
+    }
+  }
+
   const [result] = await pool.query(
     `INSERT IGNORE INTO notificaciones 
       (tipo, id_kardex, id_insumo, mensaje, fecha_evento, creado_por, id_kardex_nn, id_insumo_nn, fecha_evento_date, id_sede)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [tipo, id_kardex, id_insumo, mensaje, fecha_evento, creado_por, id_kardex_nn, id_insumo_nn, fecha_evento_date, id_sede]
+    [tipo, id_kardex, id_insumo, mensaje, fecha_evento_datetime, creado_por, id_kardex_nn, id_insumo_nn, fecha_evento_date, id_sede]
   );
   return result.insertId ? result.insertId : null;
 }
