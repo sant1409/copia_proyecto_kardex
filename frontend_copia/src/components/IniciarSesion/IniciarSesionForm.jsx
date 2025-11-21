@@ -33,7 +33,7 @@ export default function IniciarSesionForm() {
     }
 
     try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar_sesion`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/iniciar_sesion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, contraseña })
@@ -77,7 +77,7 @@ export default function IniciarSesionForm() {
   const handleSubmitRecuperarClave = async (e) => {
     e.preventDefault();
     try {
-       const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/resetear_clave`,{
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/resetear_clave`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ codigo, nuevaContraseña })
@@ -121,7 +121,7 @@ export default function IniciarSesionForm() {
   const handleSubmitCodigo = async (e) => {
     e.preventDefault();
     try {
-        const res = await  fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar_codigo`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/verificar_codigo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, codigo })
@@ -171,6 +171,29 @@ export default function IniciarSesionForm() {
           </form>
         </div>
       )}
+
+      {mensaje === "Cuenta no verificada" && (
+        <div style={{ marginTop: "10px" }}>
+          <p>¿No recibiste el código?</p>
+
+          <button
+            type="button"
+            onClick={async () => {
+              const res = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/reenviar_codigo`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ correo }),
+              });
+
+              const data = await res.json();
+              setMensaje(data.mensaje || data.error);
+            }}
+          >
+            Reenviar código
+          </button>
+        </div>
+      )}
+
 
       {paso === "correo" && (
         <div className="iniciarsesion-container">
