@@ -30,8 +30,7 @@ const transporte = nodemailer.createTransport({
     },
 });
 
-
-// registrar un usuario
+//registrarse
 router.post('/registrarse', async (req, res) => {
     const { correo, nombre, contraseña, id_sede } = req.body;
 
@@ -53,37 +52,37 @@ router.post('/registrarse', async (req, res) => {
 
     try {
         const contraseñaEncriptada = await bcrypt.hash(contraseña, 10);
-
-        // Crear código de verificación
         const codigo = String(Math.floor(100000 + Math.random() * 900000));
-        console.log("Código generado:", codigo);
-
-        // Enviar correo
-        await transporte.sendMail({
-            from: `"Mi APP" <${process.env.EMAIL_USER}>`,
-            to: correo,
-            subject: "Verificar tu cuenta",
-            text: `Tu código de verificación es: ${codigo}`,
-        });
 
         const [result] = await pool.query(
             'INSERT INTO usuarios (correo, nombre, contraseña, id_sede, codigo_verificacion) VALUES (?, ?, ?, ?, ?)',
             [correo, nombre, contraseñaEncriptada, id_sede, codigo]
         );
 
+        // 🔥 1. RESPONDE INMEDIATAMENTE
         res.status(201).json({
             message: 'Usuario registrado. Revisa tu correo para verificar la cuenta!',
             id_usuario: result.insertId
         });
 
+        // 🔥 2. ENVÍA EL CORREO EN SEGUNDO PLANO
+        setTimeout(async () => {
+            try {
+                await transporte.sendMail({
+                    from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+                    to: correo,
+                    subject: "Verificar tu cuenta",
+                    text: `Tu código de verificación es: ${codigo}`,
+                });
+                console.log("Correo enviado a", correo);
+            } catch (error) {
+                console.error("❌ Error enviando correo:", error);
+            }
+        }, 0);
+
     } catch (error) {
-        console.error("Error registrando usuario:", error);
-
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({ error: 'El correo ya está registrado' });
-        }
-
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        return res.status(500).json({ error: error.message });
     }
 });
 
