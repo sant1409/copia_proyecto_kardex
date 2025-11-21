@@ -178,6 +178,9 @@ router.post('/', verificarToken, async (req, res) => {
 const saldoNormalized =
   saldo === "" || saldo === undefined ? null : saldo;
 
+const salidaFechaNormalized =
+  salida_fecha === "" || salida_fecha === undefined ? null : salida_fecha;
+
 
     const [result] = await pool.query(
       `INSERT INTO insumos (
@@ -190,7 +193,7 @@ const saldoNormalized =
       [
         fecha, temperatura, cantidad, salidaNormalized, saldoNormalized, idNombreDelInsumo, idPresentacion,
         idLaboratorio, idProveedor, lote, fecha_de_vto, registro_invima, expediente_invima,
-        idClasificacion, estado_de_revision, salida_fecha, inicio, termino,
+        idClasificacion, estado_de_revision, salidaFechaNormalized, inicio, termino,
         lab_sas, factura, costo_global, costo, costo_prueba, costo_unidad, iva,
         consumible, mes_registro, idCategoria, usuarioId, id_sede
       ]

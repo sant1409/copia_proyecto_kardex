@@ -181,6 +181,8 @@ router.post('/', verificarToken, async (req, res) => {
 const saldoNormalized =
   saldo === "" || saldo === undefined ? null : saldo;
 
+const fechaSalidaNormalized =
+  fecha_salida === "" || fecha_salida === undefined ? null : fecha_salida;
 
 
     //  Insertar kardex
@@ -197,7 +199,7 @@ const saldoNormalized =
         fecha_recepcion, temperatura_llegada, maximo, minimo, cantidad,  salidaNormalized , saldoNormalized, idNombreInsumo,
         idPresentacion, idCasacomercial, idProveedor, lote, fecha_vencimiento, registro_invima, expediente_invima,
         estado_revision, temperatura_almacenamiento, idClasificacionRiesgo, principio_activo, forma_farmaceutica,
-        concentracion, unidad_medida, fecha_salida, fecha_inicio, fecha_terminacion, area, factura,
+        concentracion, unidad_medida, fechaSalidaNormalized, fecha_inicio, fecha_terminacion, area, factura,
         costo_general, costo_caja, costo_prueba, iva, consumible, mes_registro, lab_sas, usuarioId, id_sede
       ]
     );
