@@ -177,6 +177,12 @@ router.post('/', verificarToken, async (req, res) => {
       });
     }
 
+         // Normalizar saldo vacío (EVITA EL ERROR)
+const saldoNormalized =
+  saldo === "" || saldo === undefined ? null : saldo;
+
+
+
     //  Insertar kardex
     const [result] = await pool.query(
 
@@ -188,7 +194,7 @@ router.post('/', verificarToken, async (req, res) => {
         costo_general, costo_caja, costo_prueba, iva, consumible, mes_registro, lab_sas, usuarioId, id_sede
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
-        fecha_recepcion, temperatura_llegada, maximo, minimo, cantidad,  salidaNormalized , saldo, idNombreInsumo,
+        fecha_recepcion, temperatura_llegada, maximo, minimo, cantidad,  salidaNormalized , saldoNormalized, idNombreInsumo,
         idPresentacion, idCasacomercial, idProveedor, lote, fecha_vencimiento, registro_invima, expediente_invima,
         estado_revision, temperatura_almacenamiento, idClasificacionRiesgo, principio_activo, forma_farmaceutica,
         concentracion, unidad_medida, fecha_salida, fecha_inicio, fecha_terminacion, area, factura,
