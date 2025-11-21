@@ -184,6 +184,8 @@ const saldoNormalized =
 const fechaSalidaNormalized =
   fecha_salida === "" || fecha_salida === undefined ? null : fecha_salida;
 
+const costoGeneralNormalized =
+  costo_general === "" || costo_general === undefined ? null : costo_general;
 
     //  Insertar kardex
     const [result] = await pool.query(
@@ -200,7 +202,7 @@ const fechaSalidaNormalized =
         idPresentacion, idCasacomercial, idProveedor, lote, fecha_vencimiento, registro_invima, expediente_invima,
         estado_revision, temperatura_almacenamiento, idClasificacionRiesgo, principio_activo, forma_farmaceutica,
         concentracion, unidad_medida, fechaSalidaNormalized, fecha_inicio, fecha_terminacion, area, factura,
-        costo_general, costo_caja, costo_prueba, iva, consumible, mes_registro, lab_sas, usuarioId, id_sede
+        costoGeneralNormalized, costo_caja, costo_prueba, iva, consumible, mes_registro, lab_sas, usuarioId, id_sede
       ]
     );
 
