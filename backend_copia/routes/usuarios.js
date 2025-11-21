@@ -25,8 +25,8 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 const transporte = nodemailer.createTransport({
     service: "gmail", //O otro proveedor de direccion
     auth: {
-        user: "automatizarkardex@gmail.com",
-        pass: "dnnv qksc ddma fkgm", // generar contraseña de app si es gmail
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
     },
 });
 
