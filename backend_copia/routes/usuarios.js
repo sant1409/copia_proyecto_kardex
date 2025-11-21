@@ -23,12 +23,17 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 //Ruta para configurar Nodemailer, permite envia codigos de verificacion al correo
 
 const transporte = nodemailer.createTransport({
-    service: "gmail", //O otro proveedor de direccion
+    service: "gmail",
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
 });
+
+// Verificar configuración SMTP en startup y mostrar en logs (útil en Render)
+transporte.verify()
+    .then(() => console.log('SMTP transporter verified (usuarios.js)'))
+    .catch(err => console.error('SMTP verify error (usuarios.js):', err));
 
 //registrarse
 router.post('/registrarse', async (req, res) => {
@@ -68,15 +73,15 @@ router.post('/registrarse', async (req, res) => {
         // 🔥 2. ENVÍA EL CORREO EN SEGUNDO PLANO
         setTimeout(async () => {
             try {
-                await transporte.sendMail({
+                const info = await transporte.sendMail({
                     from: `"Mi APP" <${process.env.EMAIL_USER}>`,
                     to: correo,
                     subject: "Verificar tu cuenta",
                     text: `Tu código de verificación es: ${codigo}`,
                 });
-                console.log("Correo enviado a", correo);
+                console.log("Correo enviado a", correo, 'messageId:', info && info.messageId ? info.messageId : info);
             } catch (error) {
-                console.error("❌ Error enviando correo:", error);
+                console.error("❌ Error enviando correo:", error, 'response:', error && error.response, 'code:', error && error.code);
             }
         }, 0);
 
@@ -183,15 +188,19 @@ router.post('/recuperar_clave', async (req, res) => {
 
         await pool.query('UPDATE usuarios SET codigo_recuperacion  = ? where correo = ?', [codigo, correo]);
 
-        await transporte.sendMail({
-            from: '"Mi APP" <automatizarkardex@gmail.com>',
-            to: correo,
-            subject: "Recuperar contraseña",
-            text: `Tu codigo de recuperacion es: ${codigo}`
-        });
-
-
-        res.json({ mensaje: 'Código enviado al correo' });
+        try {
+            const info = await transporte.sendMail({
+                from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+                to: correo,
+                subject: "Recuperar contraseña",
+                text: `Tu codigo de recuperacion es: ${codigo}`
+            });
+            console.log('Correo recuperar_clave enviado a', correo, 'messageId:', info && info.messageId ? info.messageId : info);
+            res.json({ mensaje: 'Código enviado al correo' });
+        } catch (err) {
+            console.error('❌ Error enviando correo recuperar_clave:', err, 'response:', err && err.response, 'code:', err && err.code);
+            return res.status(500).json({ mensaje: 'Error enviando correo' });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ mensaje: 'Error en el servidor' });

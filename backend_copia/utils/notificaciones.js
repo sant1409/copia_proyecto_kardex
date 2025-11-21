@@ -276,15 +276,20 @@ async function enviarNotificacionesPorCorreo(id_sede) {
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: { 
-      user: 'automatizarkardex@gmail.com', 
-      pass: 'dnnv qksc ddma fkgm'
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
   });
 
+  // Verificar transporte y exponer errores en logs (útil en Render)
+  transporter.verify()
+    .then(() => console.log('SMTP transporter verified (notificaciones.js)'))
+    .catch(err => console.error('SMTP verify error (notificaciones.js):', err));
+
   for (const n of notis) {
     await transporter.sendMail({
-      from: '"Kardex Sistema" <automatizarkardex@gmail.com>',
+      from: `"Kardex Sistema" <${process.env.EMAIL_USER}>`,
       to: destinatarios.join(','),
       subject: 'Notificación del Sistema Kardex',
       text: n.mensaje
