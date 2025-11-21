@@ -164,14 +164,16 @@ router.post('/', verificarToken, async (req, res) => {
     const idCategoria = await obtenerOcrearFK(pool, 'categoria', 'categoria', id_categoria, id_sede);
 
     // Normalizar salida vacía
-    if (salida === "" || salida === undefined) salida = null;
+    const salidaNormalized =
+      salida === "" || salida === undefined ? null : salida;
 
     // ❌ Restricción: no permitir 'salida' en la creación
-    if (salida !== null && Number(salida) > 0) {
+    if (salidaNormalized !== null && Number(salidaNormalized) > 0) {
       return res.status(400).json({
         error: "No se puede asignar una salida al crear un insumo. La salida solo puede registrarse al actualizar un insumo."
       });
     }
+
 
 
     const [result] = await pool.query(

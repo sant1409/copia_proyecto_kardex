@@ -167,16 +167,15 @@ router.post('/', verificarToken, async (req, res) => {
     const idClasificacionRiesgo = await obtenerOcrearFK(pool, 'clasificacion_riesgo', 'clasificacion_riesgo', id_clasificacion_riesgo, id_sede);
 
     // Normalizar salida vacía
-    if (salida === "" || salida === undefined) salida = null;
+    const salidaNormalized =
+      salida === "" || salida === undefined ? null : salida;
 
     // No permitir salidas positivas al crear
-    if (salida !== null && Number(salida) > 0) {
+    if (salidaNormalized !== null && Number(salidaNormalized) > 0) {
       return res.status(400).json({
         error: "No se puede asignar una salida al crear un reactivo."
       });
     }
-
-
 
     //  Insertar kardex
     const [result] = await pool.query(
