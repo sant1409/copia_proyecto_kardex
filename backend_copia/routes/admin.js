@@ -4,6 +4,8 @@ const { verificarToken } = require('../middlewares/auth');
 
 // Clave maestra tomada del .env
 const CLAVE_GENERAL = process.env.CLAVE_GENERAL;
+console.log("CLAVE_GENERAL desde env:", process.env.CLAVE_GENERAL);
+
 
 router.post("/verificar-admin", verificarToken, (req, res) => {
   try {
