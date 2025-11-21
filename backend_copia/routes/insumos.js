@@ -198,6 +198,9 @@ const salidaFechaNormalized =
 
 const inicioNormalized =
   inicio === "" || inicio === undefined ? null : inicio;
+
+  const TerminoNormalized =
+  termino === "" || termino === undefined ? null : termino;
  
     const [result] = await pool.query(
       `INSERT INTO insumos (
@@ -210,7 +213,7 @@ const inicioNormalized =
       [
         fecha, temperatura, cantidad, salidaNormalized, saldoNormalized, idNombreDelInsumo, idPresentacion,
         idLaboratorio, idProveedor, lote, fecha_de_vto, registro_invima, expediente_invima,
-        idClasificacion, estado_de_revision, salidaFechaNormalized, inicioNormalized, termino,
+        idClasificacion, estado_de_revision, salidaFechaNormalized, inicioNormalized, TerminoNormalized,
         lab_sas, factura, costoGlobalNormalized, costoNormalized, costoPruebaNormalized, costoUnidadNormalized, IvaNormalized,
         consumible, mes_registro, idCategoria, usuarioId, id_sede
       ]
