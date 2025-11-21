@@ -86,6 +86,55 @@ router.post('/registrarse', async (req, res) => {
     }
 });
 
+// Reenviar código de verificación
+router.post('/reenviar_codigo', async (req, res) => {
+    const { correo } = req.body;
+
+    if (!correo) {
+        return res.status(400).json({ error: 'Correo requerido' });
+    }
+
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM usuarios WHERE correo = ?',
+            [correo]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Correo no registrado' });
+        }
+
+        const usuario = rows[0];
+
+        if (usuario.verificado) {
+            return res.status(400).json({ error: 'La cuenta ya está verificada' });
+        }
+
+        // Nuevo código
+        const codigo = String(Math.floor(100000 + Math.random() * 900000));
+
+        // Guardarlo en BD
+        await pool.query(
+            'UPDATE usuarios SET codigo_verificacion = ? WHERE correo = ?',
+            [codigo, correo]
+        );
+
+        // Enviar correo
+        await transporte.sendMail({
+            from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+            to: correo,
+            subject: "Reenvío de código de verificación",
+            text: `Tu nuevo código es: ${codigo}`
+        });
+
+        res.json({ mensaje: 'Código reenviado correctamente al correo' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor al reenviar el código' });
+    }
+});
+
 
 //Iniciar-sesion
 router.post('/iniciar_sesion', async (req, res) => {
