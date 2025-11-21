@@ -441,6 +441,25 @@ router.put('/:id_kardex', verificarToken, async (req, res) => {
     // reemplazamos la variable cantidad por la nueva
     const cantidadFinal = nuevaCantidad;
 
+
+
+const fechaSalidaNormalized =
+  fecha_salida === "" || fecha_salida === undefined ? null : fecha_salida;
+
+const costoGeneralNormalized =
+  costo_general === "" || costo_general === undefined ? null : costo_general;
+
+const costoCajaNormalized =
+  costo_caja === "" || costo_caja === undefined ? null : costo_caja;
+
+  const costoPruebaNormalized =
+  costo_prueba === "" || costo_prueba === undefined ? null : costo_prueba;
+
+   const IvaNormalized =
+   iva === "" || iva === undefined ? null : iva;
+
+    
+
     const [result] = await pool.query(
       `UPDATE kardex SET
                 fecha_recepcion = ?, temperatura_llegada = ?, maximo = ?, minimo = ?, cantidad = ?, salida = ?, saldo = ?, id_nombre_insumo = ?,
@@ -452,8 +471,8 @@ router.put('/:id_kardex', verificarToken, async (req, res) => {
         fecha_recepcion, temperatura_llegada, maximo, minimo, cantidadFinal, salida, saldo, fkFields.id_nombre_insumo,
         fkFields.id_presentacion_k, fkFields.id_casa_comercial, fkFields.id_proveedor_k, lote, fecha_vencimiento, registro_invima, expediente_invima,
         estado_revision, temperatura_almacenamiento, fkFields.id_clasificacion_riesgo, principio_activo, forma_farmaceutica,
-        concentracion, unidad_medida, fecha_salida, fecha_inicio, fecha_terminacion, area, factura,
-        costo_general, costo_caja, costo_prueba, iva, consumible, mes_registro, lab_sas, usuarioId, id_kardex, id_sede
+        concentracion, unidad_medida, fechaSalidaNormalized, fecha_inicio, fecha_terminacion, area, factura,
+        costoGeneralNormalized, costoCajaNormalized, costoPruebaNormalized, IvaNormalized, consumible, mes_registro, lab_sas, usuarioId, id_kardex, id_sede
       ]
     );
     const [usuarioResult] = await pool.query(

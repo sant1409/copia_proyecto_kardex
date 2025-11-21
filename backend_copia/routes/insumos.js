@@ -447,6 +447,27 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
     // reemplazamos la variable cantidad por la nueva
     const cantidadFinal = nuevaCantidad;
 
+      const costoGlobalNormalized =
+  costo_global === "" || costo_global === undefined ? null : costo_global;
+
+    const costoNormalized =
+  costo === "" || costo === undefined ? null : costo;
+
+  const costoPruebaNormalized =
+  costo_prueba === "" || costo_prueba === undefined ? null : costo_prueba;
+
+ const costoUnidadNormalized =
+  costo_unidad === "" || costo_unidad === undefined ? null : costo_unidad;
+
+   const IvaNormalized =
+   iva === "" || iva === undefined ? null : iva;
+
+const inicioNormalized =
+  inicio === "" || inicio === undefined ? null : inicio;
+
+  const TerminoNormalized =
+  termino === "" || termino === undefined ? null : termino;
+
     const [result] = await pool.query(
       `UPDATE insumos SET
                  fecha = ?, temperatura = ?, cantidad = ?, salida = ?, saldo = ?, id_nombre_del_insumo = ?, id_presentacion = ?,
@@ -459,9 +480,9 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
         fecha, temperatura, cantidadFinal, salida, saldo,
         fkFields.id_nombre_del_insumo, fkFields.id_presentacion, fkFields.id_laboratorio, fkFields.id_proveedor,
         lote, fecha_de_vto, registro_invima, expediente_invima,
-        fkFields.id_clasificacion, estado_de_revision, salida_fecha, inicio, termino,
-        lab_sas, factura, costo_global, costo, costo_prueba, costo_unidad,
-        iva, consumible, mes_registro, fkFields.id_categoria, usuarioId, id_insumo, id_sede
+        fkFields.id_clasificacion, estado_de_revision, salida_fecha, inicioNormalized, TerminoNormalized,
+        lab_sas, factura, costoGlobalNormalized, costoNormalized, costoPruebaNormalized, costoUnidadNormalized,
+        IvaNormalized, consumible, mes_registro, fkFields.id_categoria, usuarioId, id_insumo, id_sede
       ]
     );
     const [usuarioResult] = await pool.query(
