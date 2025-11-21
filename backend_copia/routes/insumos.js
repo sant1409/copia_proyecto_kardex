@@ -187,6 +187,13 @@ const salidaFechaNormalized =
     const costoNormalized =
   costo === "" || costo === undefined ? null : costo;
 
+  const costoPruebaNormalized =
+  costo_prueba === "" || costo_prueba === undefined ? null : costo_prueba;
+
+ const costoUnidadNormalized =
+  costo_unidad === "" || costo_unidad === undefined ? null : costo_unidad;
+
+
   
   
     const [result] = await pool.query(
@@ -201,7 +208,7 @@ const salidaFechaNormalized =
         fecha, temperatura, cantidad, salidaNormalized, saldoNormalized, idNombreDelInsumo, idPresentacion,
         idLaboratorio, idProveedor, lote, fecha_de_vto, registro_invima, expediente_invima,
         idClasificacion, estado_de_revision, salidaFechaNormalized, inicio, termino,
-        lab_sas, factura, costoGlobalNormalized, costoNormalized, costo_prueba, costo_unidad, iva,
+        lab_sas, factura, costoGlobalNormalized, costoNormalized, costoPruebaNormalized, costoUnidadNormalized, iva,
         consumible, mes_registro, idCategoria, usuarioId, id_sede
       ]
     );
