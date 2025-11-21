@@ -96,6 +96,7 @@ const [proveedoresK, setProveedoresK] = useState([]);
     setMensaje("");
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/verificar-admin`,{ 
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
