@@ -181,6 +181,9 @@ const saldoNormalized =
 const salidaFechaNormalized =
   salida_fecha === "" || salida_fecha === undefined ? null : salida_fecha;
 
+      const fechaVencimientoNormalized =
+   fecha_de_vto === "" || fecha_de_vto === undefined ? null : fecha_de_vto;
+
   const costoGlobalNormalized =
   costo_global === "" || costo_global === undefined ? null : costo_global;
 
@@ -212,7 +215,7 @@ const inicioNormalized =
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         fecha, temperatura, cantidad, salidaNormalized, saldoNormalized, idNombreDelInsumo, idPresentacion,
-        idLaboratorio, idProveedor, lote, fecha_de_vto, registro_invima, expediente_invima,
+        idLaboratorio, idProveedor, lote, fechaVencimientoNormalized, registro_invima, expediente_invima,
         idClasificacion, estado_de_revision, salidaFechaNormalized, inicioNormalized, TerminoNormalized,
         lab_sas, factura, costoGlobalNormalized, costoNormalized, costoPruebaNormalized, costoUnidadNormalized, IvaNormalized,
         consumible, mes_registro, idCategoria, usuarioId, id_sede
@@ -451,11 +454,16 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
   const saldoNormalized =
   saldo === "" || saldo === undefined ? null : saldo;
 
-    const salidaFechaNormalized =
-  salida_fecha === "" || salida_fecha === undefined ? null : salida_fecha;
+   const salidaNormalized =
+  salida === "" || salida === undefined ? null : salida;
+
+  
 
       const costoGlobalNormalized =
   costo_global === "" || costo_global === undefined ? null : costo_global;
+
+    const fechaVencimientoNormalized =
+   fecha_de_vto === "" || fecha_de_vto === undefined ? null : fecha_de_vto;
 
     const costoNormalized =
   costo === "" || costo === undefined ? null : costo;
@@ -484,9 +492,9 @@ const inicioNormalized =
                  consumible = ?,mes_registro = ?, id_categoria = ?,  usuarioId = ? WHERE id_insumo = ? AND id_sede = ?`,
 
       [
-        fecha, temperatura, cantidadFinal, salidaFechaNormalized , saldoNormalized ,
+        fecha, temperatura, cantidadFinal,  salidaNormalized, saldoNormalized ,
         fkFields.id_nombre_del_insumo, fkFields.id_presentacion, fkFields.id_laboratorio, fkFields.id_proveedor,
-        lote, fecha_de_vto, registro_invima, expediente_invima,
+        lote, fechaVencimientoNormalized, registro_invima, expediente_invima,
         fkFields.id_clasificacion, estado_de_revision, salidaFechaNormalized, inicioNormalized, TerminoNormalized,
         lab_sas, factura, costoGlobalNormalized, costoNormalized, costoPruebaNormalized, costoUnidadNormalized,
         IvaNormalized, consumible, mes_registro, fkFields.id_categoria, usuarioId, id_insumo, id_sede
