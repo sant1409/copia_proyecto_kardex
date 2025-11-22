@@ -457,7 +457,8 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
    const salidaNormalized =
   salida === "" || salida === undefined ? null : salida;
 
-  
+   const salidaFechaNormalized =
+    salida_fecha === "" || salida_fecha === undefined ? null : salida_fecha;
 
       const costoGlobalNormalized =
   costo_global === "" || costo_global === undefined ? null : costo_global;
