@@ -447,12 +447,12 @@ router.put('/:id_insumo', verificarToken, async (req, res) => {
     // reemplazamos la variable cantidad por la nueva
     const cantidadFinal = nuevaCantidad;
 
-    const salidaFechaNormalized =
-  salida_fecha === "" || salida_fecha === undefined ? null : salida_fecha;
 
   const saldoNormalized =
   saldo === "" || saldo === undefined ? null : saldo;
 
+    const salidaFechaNormalized =
+  salida_fecha === "" || salida_fecha === undefined ? null : salida_fecha;
 
       const costoGlobalNormalized =
   costo_global === "" || costo_global === undefined ? null : costo_global;
@@ -487,7 +487,7 @@ const inicioNormalized =
         fecha, temperatura, cantidadFinal, salidaFechaNormalized , saldoNormalized ,
         fkFields.id_nombre_del_insumo, fkFields.id_presentacion, fkFields.id_laboratorio, fkFields.id_proveedor,
         lote, fecha_de_vto, registro_invima, expediente_invima,
-        fkFields.id_clasificacion, estado_de_revision, salida_fecha, inicioNormalized, TerminoNormalized,
+        fkFields.id_clasificacion, estado_de_revision, salidaFechaNormalized, inicioNormalized, TerminoNormalized,
         lab_sas, factura, costoGlobalNormalized, costoNormalized, costoPruebaNormalized, costoUnidadNormalized,
         IvaNormalized, consumible, mes_registro, fkFields.id_categoria, usuarioId, id_insumo, id_sede
       ]
