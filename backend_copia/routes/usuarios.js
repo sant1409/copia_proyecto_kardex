@@ -4,8 +4,7 @@
  * Incluye registro, inicio/cierre de sesión, verificación de cuenta,
  * recuperación y cambio de contraseña, así como CRUD básico de usuarios.
  * También utiliza JWT para autenticación y Nodemailer para envío de correos.
- *El correo que envía las notificaciones puede dejar de funcionar después de un tiempo. En ese caso, se puede reemplazar o reconfigurar,
-   utilizando una clave especial generada por Google, la cual se crea desde la cuenta para permitir el envío seguro de correos del sistema.
+ 
  */
 
 
@@ -20,13 +19,13 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 
 
 
-//Ruta para configurar Nodemailer, permite envia codigos de verificacion al correo
-
 const transporte = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.SMTP_USER,   // ejemplo: 9c8094001@smtp-brevo.com
+        pass: process.env.SMTP_PASS    // tu clave SMTP de Brevo
     },
 });
 
@@ -74,7 +73,7 @@ router.post('/registrarse', async (req, res) => {
         setTimeout(async () => {
             try {
                 const info = await transporte.sendMail({
-                    from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+                    from: `"Mi APP" <${process.env.SMTP_USER}>`,
                     to: correo,
                     subject: "Verificar tu cuenta",
                     text: `Tu código de verificación es: ${codigo}`,
@@ -190,7 +189,7 @@ router.post('/recuperar_clave', async (req, res) => {
 
         try {
             const info = await transporte.sendMail({
-                from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+                from: `"Mi APP" <${process.env.SMTP_USER}>`,
                 to: correo,
                 subject: "Recuperar contraseña",
                 text: `Tu codigo de recuperacion es: ${codigo}`

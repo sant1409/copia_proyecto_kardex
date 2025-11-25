@@ -13,13 +13,16 @@
  * 
  * 🧠 Detalles técnicos:
  *  - Usa `pool` para conectarse a la base de datos MySQL.
- *  - Usa `nodemailer` con Gmail para enviar correos automáticos.
+ *   *  - Usa `nodemailer` con Brevo SMTP para enviar correos automáticos.
+ *  - Para cambiar el correo, solo debes actualizar SMTP_USER y SMTP_PASS en el archivo .env.
+
  *  - Todas las operaciones se filtran por `id_sede` para garantizar la separación por sedes.
  *  - Se puede cambiar el correo que envia las notificaciones, solo debemos bucar la clave especial que proporciona tu cuenta de gmail.
  * 
  * 📅 Autor: [Tu nombre o equipo]
  * 📂 Ubicación: /utils/notificaciones.js
  */
+
 
 
 const pool = require('../db');
@@ -274,12 +277,14 @@ async function enviarNotificacionesPorCorreo(id_sede) {
 
   const destinatarios = suscriptores.map(s => s.correo);
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
+   const transporter = nodemailer.createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
+      auth: {
+          user: process.env.SMTP_USER,   // ejemplo: 9c8094001@smtp-brevo.com
+          pass: process.env.SMTP_PASS    // tu clave SMTP de Brevo
+      },
   });
 
   // Verificar transporte y exponer errores en logs (útil en Render)
@@ -289,7 +294,7 @@ async function enviarNotificacionesPorCorreo(id_sede) {
 
   for (const n of notis) {
     await transporter.sendMail({
-      from: `"Kardex Sistema" <${process.env.EMAIL_USER}>`,
+      from: `"Kardex Sistema" <${process.env.SMTP_USER}>`,
       to: destinatarios.join(','),
       subject: 'Notificación del Sistema Kardex',
       text: n.mensaje
