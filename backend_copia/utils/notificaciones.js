@@ -278,33 +278,34 @@ async function enviarNotificacionesPorCorreo(id_sede) {
   const destinatarios = suscriptores.map(s => s.correo);
 
    const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
-      secure: false,
-      auth: {
-          user: process.env.SMTP_USER,   // ejemplo: 9c8094001@smtp-brevo.com
-          pass: process.env.SMTP_PASS    // tu clave SMTP de Brevo
-      },
-  });
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
+  auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+  }
+});
+
+// ❌ Nada de transporter.verify() aquí
 
   // Verificar transporte y exponer errores en logs (útil en Render)
-  transporter.verify()
-    .then(() => console.log('SMTP transporter verified (notificaciones.js)'))
-    .catch(err => console.error('SMTP verify error (notificaciones.js):', err));
+
 
   for (const n of notis) {
-    await transporter.sendMail({
-      from: `"Kardex Sistema" <${process.env.SMTP_USER}>`,
-      to: destinatarios.join(','),
-      subject: 'Notificación del Sistema Kardex',
-      text: n.mensaje
-    });
+  await transporter.sendMail({
+    from: `"Kardex Sistema" <${process.env.SMTP_USER}>`,
+    to: destinatarios.join(','),
+    subject: 'Notificación del Sistema Kardex',
+    text: n.mensaje
+  });
 
-    await pool.query(
-      `UPDATE notificaciones SET enviado_email = 1 WHERE id_notificacion = ? AND id_sede = ?`,
-      [n.id_notificacion, id_sede]
-    );
-  }
+  await pool.query(
+    `UPDATE notificaciones SET enviado_email = 1 WHERE id_notificacion = ? AND id_sede = ?`,
+    [n.id_notificacion, id_sede]
+  );
+}
+
 
   console.log('Notificaciones enviadas por correo a los suscriptores ✅');
 }
