@@ -37,44 +37,56 @@ const transporte = nodemailer.createTransport({
 
 
 
-
-//registrarse
+// REGISTRARSE + LOGS PROFESIONALES
 router.post('/registrarse', async (req, res) => {
+    console.log("📩 [REGISTRO] Petición recibida:", req.body);
+
     const { correo, nombre, contraseña, id_sede } = req.body;
+
+    // Logs de validación
+    if (!correo) console.log("❌ [REGISTRO] Correo faltante");
+    if (!nombre) console.log("❌ [REGISTRO] Nombre faltante");
+    if (!contraseña) console.log("❌ [REGISTRO] Contraseña faltante");
+    if (!id_sede) console.log("❌ [REGISTRO] Sede faltante");
 
     if (!correo || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(correo)) {
         return res.status(400).json({ error: 'Correo inválido o faltante' });
     }
-
     if (!nombre || nombre.trim() === '') {
         return res.status(400).json({ error: 'El nombre es obligatorio' });
     }
-
     if (!contraseña || contraseña.length < 6) {
         return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }
-
     if (!id_sede) {
         return res.status(400).json({ error: 'La sede es obligatoria' });
     }
 
     try {
+        console.log("🔐 [REGISTRO] Encriptando contraseña...");
         const contraseñaEncriptada = await bcrypt.hash(contraseña, 10);
-        const codigo = String(Math.floor(100000 + Math.random() * 900000));
 
+        const codigo = String(Math.floor(100000 + Math.random() * 900000));
+        console.log("📨 [REGISTRO] Código generado:", codigo);
+
+        console.log("🗄 [REGISTRO] Insertando usuario en DB...");
         const [result] = await pool.query(
             'INSERT INTO usuarios (correo, nombre, contraseña, id_sede, codigo_verificacion) VALUES (?, ?, ?, ?, ?)',
             [correo, nombre, contraseñaEncriptada, id_sede, codigo]
         );
 
-        // 🔥 1. RESPONDE INMEDIATAMENTE
+        console.log("✅ [DB] Usuario creado con ID:", result.insertId);
+
+        // RESPUESTA AL CLIENTE
         res.status(201).json({
-            message: 'Usuario registrado. Revisa tu correo para verificar la cuenta!',
+            message: 'Usuario registrado. Revisa tu correo para verificar la cuenta.',
             id_usuario: result.insertId
         });
 
-        // 🔥 2. ENVÍA EL CORREO EN SEGUNDO PLANO
+        // 🔥 Enviar correo en segundo plano
         setTimeout(async () => {
+            console.log("📤 [EMAIL] Preparando envío al correo:", correo);
+
             try {
                 const info = await transporte.sendMail({
                     from: `"Mi APP" <${process.env.SMTP_USER}>`,
@@ -82,17 +94,24 @@ router.post('/registrarse', async (req, res) => {
                     subject: "Verificar tu cuenta",
                     text: `Tu código de verificación es: ${codigo}`,
                 });
-                console.log("Correo enviado a", correo, 'messageId:', info && info.messageId ? info.messageId : info);
+
+                console.log("✅ [EMAIL ENVIADO] →", correo);
+                console.log("📨 messageId:", info.messageId);
+
             } catch (error) {
-                console.error("❌ Error enviando correo:", error, 'response:', error && error.response, 'code:', error && error.code);
+                console.error("❌ [ERROR SMTP] Fallo enviando correo a", correo);
+                console.error("👉 Código error:", error.code);
+                console.error("👉 Respuesta SMTP:", error.response);
+                console.error("👉 Error completo:", error);
             }
         }, 0);
 
     } catch (error) {
-        console.error(error);
+        console.error("🔥❌ [ERROR REGISTRO] Fallo en el proceso", error);
         return res.status(500).json({ error: error.message });
     }
 });
+
 
 
 
