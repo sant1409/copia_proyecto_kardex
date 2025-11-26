@@ -23,16 +23,20 @@ const transporte = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,
     secure: false,
-    auth: {
-        user: process.env.SMTP_USER,   // ejemplo: 9c8094001@smtp-brevo.com
-        pass: process.env.SMTP_PASS    // tu clave SMTP de Brevo
+    requireTLS: true,
+    connectionTimeout: 30000,
+    socketTimeout: 30000,
+    tls: {
+        rejectUnauthorized: false
     },
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
 });
 
-// Verificar configuración SMTP en startup y mostrar en logs (útil en Render)
-transporte.verify()
-    .then(() => console.log('SMTP transporter verified (usuarios.js)'))
-    .catch(err => console.error('SMTP verify error (usuarios.js):', err));
+
+
 
 //registrarse
 router.post('/registrarse', async (req, res) => {
