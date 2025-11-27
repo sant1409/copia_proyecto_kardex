@@ -135,17 +135,42 @@ cron.schedule('* * * * *', async () => {
     console.log('⏰ Cron iniciado para notificaciones');
     try {
         // Obtener todas las sedes activas
+        console.log('📋 Consultando sedes de la base de datos...');
         const [sedes] = await pool.query('SELECT id_sede FROM sede');
+        console.log(`✅ Sedes obtenidas: ${sedes.length} sedes encontradas`);
 
        for (const s of sedes) {
     const id_sede = s.id_sede;
-    await procesarSalidas(id_sede); 
-    await generarNotificacionesAutomaticas(id_sede);
-    await enviarNotificacionesPorCorreo(id_sede);
+    console.log(`🔄 Procesando notificaciones para id_sede: ${id_sede}`);
+    
+    try {
+      console.log(`  → Ejecutando procesarSalidas(${id_sede})...`);
+      await procesarSalidas(id_sede);
+      console.log(`  ✅ procesarSalidas completado para id_sede: ${id_sede}`);
+    } catch (err) {
+      console.error(`  ❌ Error en procesarSalidas(${id_sede}):`, err.message);
+    }
+    
+    try {
+      console.log(`  → Ejecutando generarNotificacionesAutomaticas(${id_sede})...`);
+      await generarNotificacionesAutomaticas(id_sede);
+      console.log(`  ✅ generarNotificacionesAutomaticas completado para id_sede: ${id_sede}`);
+    } catch (err) {
+      console.error(`  ❌ Error en generarNotificacionesAutomaticas(${id_sede}):`, err.message);
+    }
+    
+    try {
+      console.log(`  → Ejecutando enviarNotificacionesPorCorreo(${id_sede})...`);
+      await enviarNotificacionesPorCorreo(id_sede);
+      console.log(`  ✅ enviarNotificacionesPorCorreo completado para id_sede: ${id_sede}`);
+    } catch (err) {
+      console.error(`  ❌ Error en enviarNotificacionesPorCorreo(${id_sede}):`, err.message);
+    }
         }
         console.log('✅ Proceso de notificaciones completado para todas las sedes.');
     } catch (error) {
-        console.error('❌ Error en el cron de notificaciones:', error);
+        console.error('❌ Error en el cron de notificaciones (nivel superior):', error.message, error.code);
+        console.error('Stack:', error.stack);
     }
 });
 
