@@ -43,10 +43,12 @@ async function crearNotificacion({ tipo, id_kardex = null, id_insumo = null, men
   // Evitar pasar valores inválidos o '0000-00-00 00:00:00' que provocan error en MySQL.
   let fecha_evento_datetime = null;
   if (fecha_evento) {
-    const s = String(fecha_evento);
-    if (!s.startsWith('0000-00-00')) {
-      const d = new Date(fecha_evento);
-      if (!isNaN(d.getTime())) {
+    const s = String(fecha_evento).trim();
+    // Descartar explícitamente cualquier string que contenga '0000-00-00' o sea vacío
+    if (s && !s.includes('0000-00-00') && s !== '') {
+      const d = new Date(s);
+      // Validar que la fecha sea válida y que el año sea >= 1900 (MySQL DATETIME válido)
+      if (!isNaN(d.getTime()) && d.getFullYear() >= 1900) {
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, '0');
         const dd = String(d.getDate()).padStart(2, '0');
@@ -190,7 +192,8 @@ for (const item of insumos) {
 
 // 🔹 Procesar salidas sin logs
 async function procesarSalidas(id_sede) {
-    try {  const hoy = fechaLocalYYYYMMDD(new Date()); // Siempre en hora local de Colombia
+    try {  
+      const hoy = fechaLocalYYYYMMDD(new Date()); // Siempre en hora local de Colombia
 
         // Salida de reactivos (kardex)
         const [kardexSalidas] = await pool.query(`
@@ -200,14 +203,17 @@ async function procesarSalidas(id_sede) {
             LEFT JOIN casa_comercial cc ON k.id_casa_comercial = cc.id_casa_comercial
             WHERE k.fecha_terminacion IS NOT NULL 
               AND k.fecha_terminacion <> ''
+              AND k.fecha_terminacion <> '0000-00-00'
+              AND k.fecha_terminacion <> '0000-00-00 00:00:00'
               AND k.id_sede = ?
         `, [id_sede]);
 
        for (const item of kardexSalidas) {
-  const terminacionStr = item.fecha_terminacion ? String(item.fecha_terminacion).split('T')[0] : null;
-  if (!terminacionStr || terminacionStr.startsWith('0000-00-00')) continue;
+  const terminacionStr = item.fecha_terminacion ? String(item.fecha_terminacion).trim().split('T')[0] : null;
+  // Validación doble: descartar si empieza con '0000' o es vacío
+  if (!terminacionStr || terminacionStr.startsWith('0000') || terminacionStr === '') continue;
 
-  // 🚫 No conviertas con new Date() — compara el string directo
+  // Comparar el string directo sin conversión
   const fechaSalida = terminacionStr;  
 
   if (fechaSalida === hoy) {
@@ -228,13 +234,15 @@ const [insumosSalidas] = await pool.query(`
   LEFT JOIN nombre_del_insumo ndi ON i.id_nombre_del_insumo = ndi.id_nombre_del_insumo
   LEFT JOIN laboratorio l ON i.id_laboratorio = l.id_laboratorio
   WHERE i.termino IS NOT NULL 
+    AND i.termino <> ''
     AND i.termino <> '0000-00-00 00:00:00'
     AND i.id_sede = ?
 `, [id_sede]);
 
 for (const item of insumosSalidas) {
-  const terminoStr = item.termino ? String(item.termino) : null;
-  if (!terminoStr || terminoStr.startsWith('0000-00-00')) continue;
+  const terminoStr = item.termino ? String(item.termino).trim() : null;
+  // Validación doble: descartar si empieza con '0000' o es vacío
+  if (!terminoStr || terminoStr.startsWith('0000') || terminoStr === '') continue;
 
   // Si viene con hora/UTC lo normalizamos a YYYY-MM-DD local
   const fechaSalida = fechaLocalYYYYMMDD(new Date(terminoStr));
@@ -251,7 +259,7 @@ for (const item of insumosSalidas) {
 }
 
     } catch (error) {
-        console.error("❌ Error procesando salidas para id_sede:", id_sede, error);
+        console.error("❌ Error procesando salidas para id_sede:", id_sede, error.message, error.code);
     }
 }
 

@@ -65,6 +65,7 @@ module.exports = {
 
       lote: { type: Sequelize.STRING, allowNull: true },
       fecha_de_vto: { type: Sequelize.DATE, allowNull: true },
+
       registro_invima: { type: Sequelize.STRING, allowNull: true },
       expediente_invima: { type: Sequelize.STRING, allowNull: true },
 
