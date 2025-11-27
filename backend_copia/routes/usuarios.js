@@ -19,7 +19,7 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 
 
 
-const nodemailer = require("nodemailer");
+
 
 const transporte = nodemailer.createTransport({
   service: "gmail",
