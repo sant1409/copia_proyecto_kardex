@@ -44,8 +44,8 @@ async function crearNotificacion({ tipo, id_kardex = null, id_insumo = null, men
   let fecha_evento_datetime = null;
   if (fecha_evento) {
     const s = String(fecha_evento).trim();
-    // Descartar explícitamente cualquier string que contenga '0000-00-00' o sea vacío
-    if (s && !s.includes('0000-00-00') && s !== '') {
+    // Descartar explícitamente: vacío, '0000-00-00', null, undefined, strings cortos
+    if (s && s !== '' && !s.includes('0000-00-00') && s !== 'null' && s !== 'undefined' && s.length > 3) {
       const d = new Date(s);
       // Validar que la fecha sea válida y que el año sea >= 1900 (MySQL DATETIME válido)
       if (!isNaN(d.getTime()) && d.getFullYear() >= 1900) {
@@ -56,9 +56,14 @@ async function crearNotificacion({ tipo, id_kardex = null, id_insumo = null, men
         const mi = String(d.getMinutes()).padStart(2, '0');
         const ss = String(d.getSeconds()).padStart(2, '0');
         fecha_evento_datetime = `${y}-${m}-${dd} ${hh}:${mi}:${ss}`;
+      } else {
+        console.warn(`⚠️ Fecha rechazada (año inválido): "${s}" para id_sede ${id_sede}`);
       }
+    } else {
+      console.warn(`⚠️ Fecha rechazada (formato vacío o inválido): "${s}" para id_sede ${id_sede}`);
     }
   }
+  console.log(`📌 crearNotificacion - tipo: ${tipo}, fecha_evento: "${fecha_evento}", fecha_evento_datetime: ${fecha_evento_datetime}, id_sede: ${id_sede}`);
 
   const [result] = await pool.query(
     `INSERT IGNORE INTO notificaciones 
@@ -205,8 +210,10 @@ async function procesarSalidas(id_sede) {
               AND k.fecha_terminacion <> ''
               AND k.fecha_terminacion <> '0000-00-00'
               AND k.fecha_terminacion <> '0000-00-00 00:00:00'
+              AND CHAR_LENGTH(CAST(k.fecha_terminacion AS CHAR)) > 3
               AND k.id_sede = ?
         `, [id_sede]);
+        console.log(`🔍 procesarSalidas kardex: ${kardexSalidas.length} registros encontrados para id_sede ${id_sede}`);
 
        for (const item of kardexSalidas) {
   const terminacionStr = item.fecha_terminacion ? String(item.fecha_terminacion).trim().split('T')[0] : null;
@@ -236,8 +243,10 @@ const [insumosSalidas] = await pool.query(`
   WHERE i.termino IS NOT NULL 
     AND i.termino <> ''
     AND i.termino <> '0000-00-00 00:00:00'
+    AND CHAR_LENGTH(CAST(i.termino AS CHAR)) > 3
     AND i.id_sede = ?
 `, [id_sede]);
+console.log(`🔍 procesarSalidas insumos: ${insumosSalidas.length} registros encontrados para id_sede ${id_sede}`);
 
 for (const item of insumosSalidas) {
   const terminoStr = item.termino ? String(item.termino).trim() : null;
