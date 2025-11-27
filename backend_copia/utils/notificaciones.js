@@ -276,16 +276,14 @@ async function enviarNotificacionesPorCorreo(id_sede) {
   if (!suscriptores.length) return;
 
   const destinatarios = suscriptores.map(s => s.correo);
-
-   const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-  }
-});
+   
+   const transporte = nodemailer.createTransport({
+     service: "gmail",
+     auth: {
+       user: process.env.EMAIL_USER,
+       pass: process.env.EMAIL_PASS
+     }
+   });
 
 // ❌ Nada de transporter.verify() aquí
 
@@ -293,8 +291,8 @@ async function enviarNotificacionesPorCorreo(id_sede) {
 
 
   for (const n of notis) {
-  await transporter.sendMail({
-    from: `"Kardex Sistema" <${process.env.SMTP_USER}>`,
+  await transporte.sendMail({
+    from: `"Kardex Sistema" <${process.env.EMAIL_USER}>`,
     to: destinatarios.join(','),
     subject: 'Notificación del Sistema Kardex',
     text: n.mensaje

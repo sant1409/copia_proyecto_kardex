@@ -19,20 +19,14 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 
 
 
+const nodemailer = require("nodemailer");
+
 const transporte = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    connectionTimeout: 30000,
-    socketTimeout: 30000,
-    tls: {
-        rejectUnauthorized: false
-    },
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-    }
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
 });
 
 
@@ -89,7 +83,7 @@ router.post('/registrarse', async (req, res) => {
 
             try {
                 const info = await transporte.sendMail({
-                    from: `"Mi APP" <${process.env.SMTP_USER}>`,
+                    from: `"Mi APP" <${process.env.EMAIL_USER}>`,
                     to: correo,
                     subject: "Verificar tu cuenta",
                     text: `Tu código de verificación es: ${codigo}`,
@@ -212,7 +206,7 @@ router.post('/recuperar_clave', async (req, res) => {
 
         try {
             const info = await transporte.sendMail({
-                from: `"Mi APP" <${process.env.SMTP_USER}>`,
+                from: `"Mi APP" <${process.env.EMAIL_USER}>`,
                 to: correo,
                 subject: "Recuperar contraseña",
                 text: `Tu codigo de recuperacion es: ${codigo}`
