@@ -216,14 +216,26 @@ async function enviarNotificacionesPorCorreo(id_sede) {
   if (!suscriptores.length) return;
 
   const destinatarios = suscriptores.map(s => s.correo);
+  
+  // --- MODIFICACIÓN CLAVE PARA BREVO (SMTP) ---
   const transporte = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+    host: process.env.SMTP_HOST, // 'smtp-relay.brevo.com'
+    port: process.env.SMTP_PORT,   // 587
+    secure: false, // Necesario para usar STARTTLS en el puerto 587
+    auth: {
+      user: process.env.SMTP_USER, // Su login de Brevo
+      pass: process.env.SMTP_PASS  // Su Clave API de Brevo
+    },
+    tls: {
+      rejectUnauthorized: false // Puede ser necesario para Render/servidores sin certificado CA
+    }
   });
+  // ---------------------------------------------
 
   for (const n of notis) {
     await transporte.sendMail({
-      from: `"Kardex Sistema" <${process.env.EMAIL_USER}>`,
+      // Usamos SMTP_USER como remitente (from)
+      from: `"Kardex Sistema" <${process.env.SMTP_USER}>`, 
       to: destinatarios.join(','),
       subject: 'Notificación del Sistema Kardex',
       text: n.mensaje

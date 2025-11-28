@@ -443,10 +443,10 @@ router.put('/:id_kardex', verificarToken, async (req, res) => {
 
 
 
-const fechaSalidaNormalized =
+ const fechaSalidaNormalized =
   fecha_salida === "" || fecha_salida === undefined ? null : fecha_salida;
 
-const costoGeneralNormalized =
+  const costoGeneralNormalized =
   costo_general === "" || costo_general === undefined ? null : costo_general;
 
 const costoCajaNormalized =

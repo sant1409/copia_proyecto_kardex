@@ -18,17 +18,18 @@ const { verificarToken } = require('../middlewares/auth');
 const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 
 
-
-
-
 const transporte = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.SMTP_HOST, // Reemplaza 'service: "gmail"'
+  port: process.env.SMTP_PORT,
+  secure: false, // Usa 'false' para el puerto 587 con STARTTLS
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.SMTP_USER, // Usando la variable SMTP_USER
+    pass: process.env.SMTP_PASS  // Usando la variable SMTP_PASS
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
-
 
 
 // REGISTRARSE + LOGS PROFESIONALES
@@ -83,7 +84,7 @@ router.post('/registrarse', async (req, res) => {
 
             try {
                 const info = await transporte.sendMail({
-                    from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+                    from: `"Mi APP" <${process.env.SMTP_USER}>`,
                     to: correo,
                     subject: "Verificar tu cuenta",
                     text: `Tu código de verificación es: ${codigo}`,
@@ -206,7 +207,7 @@ router.post('/recuperar_clave', async (req, res) => {
 
         try {
             const info = await transporte.sendMail({
-                from: `"Mi APP" <${process.env.EMAIL_USER}>`,
+                from: `"Mi APP" <${process.env.SMTP_USER}>`,
                 to: correo,
                 subject: "Recuperar contraseña",
                 text: `Tu codigo de recuperacion es: ${codigo}`
