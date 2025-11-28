@@ -221,7 +221,7 @@ async function enviarNotificacionesPorCorreo(id_sede) {
   const transporte = nodemailer.createTransport({
     host: process.env.SMTP_HOST, // 'smtp-relay.brevo.com'
     port: process.env.SMTP_PORT,   // 587
-    secure: false, // Necesario para usar STARTTLS en el puerto 587
+    secure: true, 
     auth: {
       user: process.env.SMTP_USER, // Su login de Brevo
       pass: process.env.SMTP_PASS  // Su Clave API de Brevo

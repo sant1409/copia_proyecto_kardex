@@ -21,7 +21,7 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 const transporte = nodemailer.createTransport({
   host: process.env.SMTP_HOST, // Reemplaza 'service: "gmail"'
   port: process.env.SMTP_PORT,
-  secure: false, // Usa 'false' para el puerto 587 con STARTTLS
+  secure: true, // Usa 'false' para el puerto 587 con STARTTLS
   auth: {
     user: process.env.SMTP_USER, // Usando la variable SMTP_USER
     pass: process.env.SMTP_PASS  // Usando la variable SMTP_PASS
