@@ -19,17 +19,25 @@ const claveSecreta = process.env.JWT_SECRET || '123456789santiago';
 
 
 const transporte = nodemailer.createTransport({
-  host: process.env.SMTP_HOST, // Reemplaza 'service: "gmail"'
-  port: process.env.SMTP_PORT,
-  secure: true, // Usa 'false' para el puerto 587 con STARTTLS
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: false,
   auth: {
-    user: process.env.SMTP_USER, // Usando la variable SMTP_USER
-    pass: process.env.SMTP_PASS  // Usando la variable SMTP_PASS
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   },
   tls: {
     rejectUnauthorized: false
-  }
+  },
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 15000
 });
+
+// Verificar transporte en startup
+transporte.verify()
+  .then(() => console.log('✅ SMTP transporter verificado (usuarios.js)'))
+  .catch(err => console.error('❌ SMTP verify error (usuarios.js):', err.message, 'code:', err.code));
 
 
 // REGISTRARSE + LOGS PROFESIONALES

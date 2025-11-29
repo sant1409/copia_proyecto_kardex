@@ -217,35 +217,52 @@ async function enviarNotificacionesPorCorreo(id_sede) {
 
   const destinatarios = suscriptores.map(s => s.correo);
   
-  // --- MODIFICACIÓN CLAVE PARA BREVO (SMTP) ---
   const transporte = nodemailer.createTransport({
-    host: process.env.SMTP_HOST, // 'smtp-relay.brevo.com'
-    port: process.env.SMTP_PORT,   // 587
-    secure: true, 
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: false,
     auth: {
-      user: process.env.SMTP_USER, // Su login de Brevo
-      pass: process.env.SMTP_PASS  // Su Clave API de Brevo
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
     },
     tls: {
-      rejectUnauthorized: false // Puede ser necesario para Render/servidores sin certificado CA
-    }
+      rejectUnauthorized: false
+    },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 15000
   });
-  // ---------------------------------------------
+
+  // Verificar transporte antes de enviar
+  try {
+    await transporte.verify();
+    console.log(`✅ SMTP transporter verificado para enviarNotificacionesPorCorreo (id_sede: ${id_sede})`);
+  } catch (verifyErr) {
+    console.error(`❌ SMTP verify error en enviarNotificacionesPorCorreo (id_sede: ${id_sede}):`, verifyErr.message, 'code:', verifyErr.code);
+    return; // No intentar enviar si SMTP falla
+  }
 
   for (const n of notis) {
-    await transporte.sendMail({
-      // Usamos SMTP_USER como remitente (from)
-      from: `"Kardex Sistema" <${process.env.SMTP_USER}>`, 
-      to: destinatarios.join(','),
-      subject: 'Notificación del Sistema Kardex',
-      text: n.mensaje
-    });
-    await pool.query(
-      `UPDATE notificaciones SET enviado_email = 1 WHERE id_notificacion = ? AND id_sede = ?`,
-      [n.id_notificacion, id_sede]
-    );
+    try {
+      const info = await transporte.sendMail({
+        from: `"Kardex Sistema" <${process.env.SMTP_USER}>`,
+        to: destinatarios.join(','),
+        subject: 'Notificación del Sistema Kardex',
+        text: n.mensaje
+      });
+      
+      await pool.query(
+        `UPDATE notificaciones SET enviado_email = 1 WHERE id_notificacion = ? AND id_sede = ?`,
+        [n.id_notificacion, id_sede]
+      );
+      
+      console.log(`✅ Notificación enviada (id_notificacion: ${n.id_notificacion}) messageId: ${info.messageId}`);
+    } catch (sendErr) {
+      console.error(`❌ Error enviando notificación (id_notificacion: ${n.id_notificacion}):`, sendErr.message, 'code:', sendErr.code);
+      // No actualizar enviado_email para reintentar después
+    }
   }
-  console.log('Notificaciones enviadas por correo a los suscriptores ✅');
+  console.log('✅ Proceso de envío de notificaciones completado para id_sede:', id_sede);
 }
 
 module.exports = { 
