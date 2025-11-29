@@ -131,7 +131,7 @@ app.use("/links", linksRoutes)
 
 const { generarNotificacionesAutomaticas, enviarNotificacionesPorCorreo, procesarSalidas } = require('./utils/notificaciones');
 const pool = require('./db'); // conexión MySQL
-cron.schedule('* * * * *', async () => {  
+cron.schedule('0 8 * * *', async () => {  
     console.log('⏰ Cron iniciado para notificaciones');
     try {
         // Obtener todas las sedes activas
