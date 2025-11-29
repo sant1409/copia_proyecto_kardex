@@ -23,7 +23,7 @@ const transporte = nodemailer.createTransport({
   port: Number(process.env.SMTP_PORT) || 587,
   secure: Number(process.env.SMTP_PORT) === 465, // true si puerto 465, false si 587
   auth: {
-    user: process.env.SMTP_USER,
+    user: process.env.EMAIL_FROM,
     pass: process.env.SMTP_PASS
   },
   tls: {
@@ -92,7 +92,7 @@ router.post('/registrarse', async (req, res) => {
 
             try {
                 const info = await transporte.sendMail({
-                    from: `"Mi APP" <${process.env.SMTP_USER}>`,
+                    from: `"Mi APP" <${process.env.EMAIL_FROM}>`,
                     to: correo,
                     subject: "Verificar tu cuenta",
                     text: `Tu código de verificación es: ${codigo}`,
@@ -215,7 +215,7 @@ router.post('/recuperar_clave', async (req, res) => {
 
         try {
             const info = await transporte.sendMail({
-                from: `"Mi APP" <${process.env.SMTP_USER}>`,
+                from: `"Mi APP" <${process.env.EMAIL_FROM}>`,
                 to: correo,
                 subject: "Recuperar contraseña",
                 text: `Tu codigo de recuperacion es: ${codigo}`

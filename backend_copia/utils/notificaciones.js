@@ -224,7 +224,7 @@ async function enviarNotificacionesPorCorreo(id_sede) {
     port: port,
     secure: port === 465, // true si puerto 465, false si 587/2525
     auth: {
-      user: process.env.SMTP_USER,
+      user: process.env.EMAIL_FROM,
       pass: process.env.SMTP_PASS
     },
     tls: {
@@ -273,7 +273,7 @@ async function enviarNotificacionesPorCorreo(id_sede) {
   for (const n of notis) {
     try {
       const info = await transporte.sendMail({
-        from: `"Kardex Sistema" <${process.env.SMTP_USER}>`,
+        from: `"Kardex Sistema" <${process.env.EMAIL_FROM}>`,
         to: destinatarios.join(','),
         subject: 'Notificación del Sistema Kardex',
         text: n.mensaje
