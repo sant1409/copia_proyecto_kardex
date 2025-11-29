@@ -217,10 +217,12 @@ async function enviarNotificacionesPorCorreo(id_sede) {
 
   const destinatarios = suscriptores.map(s => s.correo);
   
-  const transporte = nodemailer.createTransport({
+  // Construir opciones base del transporte
+  const basePort = Number(process.env.SMTP_PORT) || 587;
+  const buildOptions = (port) => ({
     host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: Number(process.env.SMTP_PORT) === 465, // true si puerto 465, false si 587
+    port: port,
+    secure: port === 465, // true si puerto 465, false si 587/2525
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
@@ -233,13 +235,39 @@ async function enviarNotificacionesPorCorreo(id_sede) {
     socketTimeout: 15000
   });
 
-  // Verificar transporte antes de enviar
+  // Intentar verificar transporte; si hay ETIMEDOUT, probar puertos alternativos
+  let transporte = nodemailer.createTransport(buildOptions(basePort));
   try {
     await transporte.verify();
-    console.log(`✅ SMTP transporter verificado para enviarNotificacionesPorCorreo (id_sede: ${id_sede})`);
+    console.log(`✅ SMTP transporter verificado para enviarNotificacionesPorCorreo (id_sede: ${id_sede}, port: ${basePort})`);
   } catch (verifyErr) {
-    console.error(`❌ SMTP verify error en enviarNotificacionesPorCorreo (id_sede: ${id_sede}):`, verifyErr.message, 'code:', verifyErr.code);
-    return; // No intentar enviar si SMTP falla
+    console.error(`⚠️ SMTP verify error inicial (id_sede: ${id_sede}, port: ${basePort}):`, verifyErr.message, 'code:', verifyErr.code);
+
+    // Si timeout de conexión, intentar puertos comunes alternativos (587, 2525)
+    if (verifyErr && String(verifyErr.code).toUpperCase().includes('ETIMEDOUT')) {
+      const fallbackPorts = [587, 2525].filter(p => p !== basePort);
+      let ok = false;
+      for (const p of fallbackPorts) {
+        try {
+          console.log(`🔁 Intentando puerto alternativo ${p} para id_sede: ${id_sede}`);
+          transporte = nodemailer.createTransport(buildOptions(p));
+          await transporte.verify();
+          console.log(`✅ SMTP transporter verificado con puerto alternativo ${p} (id_sede: ${id_sede})`);
+          ok = true;
+          break;
+        } catch (altErr) {
+          console.error(`❌ Falló verify en puerto ${p} (id_sede: ${id_sede}):`, altErr.message, 'code:', altErr.code);
+        }
+      }
+      if (!ok) {
+        console.error(`❌ Todos los intentos de verify fallaron para id_sede: ${id_sede}. No se enviarán correos.`);
+        return;
+      }
+    } else {
+      // Otros errores: no continuar
+      console.error(`❌ SMTP verify error no recuperable (id_sede: ${id_sede}):`, verifyErr.message, 'code:', verifyErr.code);
+      return;
+    }
   }
 
   for (const n of notis) {
